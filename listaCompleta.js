@@ -42,3 +42,23 @@ console.log(
 function calculateFine(speed) {
   return (speed - PERMITTED_SPEED) * FINE_VALUE;
 }
+
+/* 3. Faça um algoritmo que pergunte a distância que um passageiro deseja percorrer em
+Km. Calcule o preço da passagem, cobrando R$ 0.50 por Km para viagens até 200 Km e
+R$ 0.45 para viagens mais longas.
+*/
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+let distance = parseFloat(prompt("Informe a distância a ser percorrida: "));
+const DISTANCE_UP_TO_200 = 0.5;
+const DISTANCE_MORE_THAN_200 = 0.45;
+
+console.log(
+  `O valor da viagem será de R$ ${calculateTrip(distance).toFixed(2)}`
+);
+
+function calculateTrip(distance) {
+  return distance <= 200
+    ? distance * DISTANCE_UP_TO_200
+    : distance * DISTANCE_MORE_THAN_200;
+}
