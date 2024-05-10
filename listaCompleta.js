@@ -62,3 +62,22 @@ function calculateTrip(distance) {
     ? distance * DISTANCE_UP_TO_200
     : distance * DISTANCE_MORE_THAN_200;
 }
+
+/* 4. Crie um programa que leia o tamanho de três segmentos de reta. Analise seus
+comprimentos e diga se é possível formar um triângulo com essas retas.
+Matematicamente, para três segmentos formarem um triângulo, o comprimento de cada
+lado deve ser menor que a soma dos outros dois.
+*/
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+let measureSides = new Array(3);
+for (i = 0; i < measureSides.length; i++)
+  measureSides[i] = parseInt(prompt(`Informe as medidas do lado ${i + 1}: `));
+
+console.log(checkMeasures(measureSides));
+
+function checkMeasures(measures) {
+  const [A, B, C] = measures;
+  if (A + B > C && A + C > B && B + C > A) return "Forma um triângulo.";
+  else return "Não forma um triângulo.";
+}
