@@ -142,3 +142,22 @@ function identifier(player) {
       return "Opção inválida";
   }
 }
+
+/* 6. Crie um jogo onde o computador vai sortear um número entre 1 e 5. O jogador vai
+tentar descobrir qual foi o valor sorteado. 
+*/
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+let drawnNumber = getRandomInt(1, 5);
+console.log("Tente adivinhar o número escolhido entre 1 e 5: ");
+let attempt = 0;
+do {
+  attempt = parseInt(prompt("Qual a sua escolha? "));
+  if (attempt === drawnNumber) {
+    console.log(`Acertou! O número era o ${drawnNumber}.`);
+  } else if (attempt < 1 || attempt > 5) {
+    console.log("Valor inválido, fora do intervado de 1 a 5.");
+  } else {
+    console.log("Errou, tente novamente.");
+  }
+} while (drawnNumber != attempt);
