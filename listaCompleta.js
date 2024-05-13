@@ -94,17 +94,13 @@ console.log("--- Vamos jogar JoKenPo ---");
 
 let win = false;
 let option = 0;
-let opponent = 0;
+let opponent = getRandomInt(3, 1);
 
 while (option < 1 || option > 3) {
   option = parseInt(
     prompt("Selecione uma opção: 1 (Pedra) | 2 (Papel) | 3 (Tesoura): ")
   );
 }
-
-do {
-  opponent = getRandomInt(3, 1);
-} while (opponent === option);
 
 switch (true) {
   case option === 1 && opponent === 3:
@@ -116,16 +112,23 @@ switch (true) {
   case option === 3 && opponent === 2:
     win = true;
     break;
+  case option === opponent:
+    win = null;
+    break;
   default:
     win = false;
     break;
 }
 
-console.log(
-  win
-    ? `${identifier(option)} vence ${identifier(opponent)}, você Venceu!`
-    : `${identifier(opponent)} vence ${identifier(option)}, você Perdeu!`
-);
+if (win != null) {
+  console.log(
+    win
+      ? `${identifier(option)} vence ${identifier(opponent)}, você Venceu!`
+      : `${identifier(opponent)} vence ${identifier(option)}, você Perdeu!`
+  );
+} else {
+  console.log(`${identifier(option)} empata com ${identifier(opponent)}.`);
+}
 
 function identifier(player) {
   switch (player) {
