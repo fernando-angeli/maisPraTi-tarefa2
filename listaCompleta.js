@@ -1,6 +1,11 @@
 const prompt = require("prompt-sync")();
 let exercise = 1;
 
+// Funções auxíliares reutilizaveis
+function getRandomInt(max, min) {
+  return parseInt(Math.floor(Math.random() * (max - min + 1) + min));
+}
+
 /* 1. Escreva um programa para calcular a redução do tempo de vida de um fumante.
 Pergunte a quantidade de cigarros fumados por dias e quantos anos ele já fumou.
 Considere que um fumante perde 10 min de vida a cada cigarro. Calcule quantos dias de
@@ -98,7 +103,7 @@ while (option < 1 || option > 3) {
 }
 
 do {
-  opponent = getRandomInt();
+  opponent = getRandomInt(3, 1);
 } while (opponent === option);
 
 switch (true) {
@@ -121,10 +126,6 @@ console.log(
     ? `${identifier(option)} vence ${identifier(opponent)}, você Venceu!`
     : `${identifier(opponent)} vence ${identifier(option)}, você Perdeu!`
 );
-
-function getRandomInt() {
-  return parseInt(Math.floor(Math.random() * (3 - 1 + 1) + 1));
-}
 
 function identifier(player) {
   switch (player) {
