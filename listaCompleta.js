@@ -81,3 +81,60 @@ function checkMeasures(measures) {
   if (A + B > C && A + C > B && B + C > A) return "Forma um triângulo.";
   else return "Não forma um triângulo.";
 }
+
+/* 5. Crie um jogo de JoKenPo (Pedra-Papel-Tesoura).
+ */
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log("--- Vamos jogar JoKenPo ---");
+
+let win = false;
+let option = 0;
+let opponent = 0;
+
+while (option < 1 || option > 3) {
+  option = parseInt(
+    prompt("Selecione uma opção: 1 (Pedra) | 2 (Papel) | 3 (Tesoura): ")
+  );
+}
+
+do {
+  opponent = getRandomInt();
+} while (opponent === option);
+
+switch (true) {
+  case option === 1 && opponent === 3:
+    win = true;
+    break;
+  case option === 2 && opponent === 1:
+    win = true;
+    break;
+  case option === 3 && opponent === 2:
+    win = true;
+    break;
+  default:
+    win = false;
+    break;
+}
+
+console.log(
+  win
+    ? `${identifier(option)} vence ${identifier(opponent)}, você Venceu!`
+    : `${identifier(opponent)} vence ${identifier(option)}, você Perdeu!`
+);
+
+function getRandomInt() {
+  return parseInt(Math.floor(Math.random() * (3 - 1 + 1) + 1));
+}
+
+function identifier(player) {
+  switch (player) {
+    case 1:
+      return "Pedra";
+    case 2:
+      return "Papel";
+    case 3:
+      return "Tesoura";
+    default:
+      return "Opção inválida";
+  }
+}
