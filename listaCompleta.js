@@ -161,3 +161,66 @@ do {
     console.log("Errou, tente novamente.");
   }
 } while (drawnNumber != attempt);
+
+/* 7. Uma empresa de aluguel de carros precisa cobrar pelos seus serviços. O aluguel de um
+carro popular custa R$ 90,00 por dia e um carro de luxo custa R$ 150,00. Além disso, o
+cliente paga por Km percorrido. Faça um programa que leia o tipo de carro alugado
+(popular ou luxo), quantos dias de aluguel e quantos Km foram percorridos. No final,
+mostre o preço a ser pago de acordo com os dados a seguir:
+Carros populares
+- Até 100 Km percorridos: R$ 0,20 por Km
+- Acima de 100 Km percorridos: R$ 0,10 por Km
+Carros de luxo
+- Até 200 Km percorridos: R$ 0,30 por Km
+- Acima de 200 Km percorridos: R$ 0,25 por Km
+*/
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+const POPULAR_CAR_DAILY = 90.0;
+const POPULAR_KM_UP_TO_100_KM = 0.2;
+const POPULAR_KM_OVER_100_KM = 0.1;
+const LUXURY_CAR_DAILY = 150.0;
+const LUXURY_KM_UP_TO_200_KM = 0.3;
+const LUXURY_KM_OVER_200_KM = 0.25;
+
+let typeCar = parseInt(
+  prompt("Selecione o tipo de veículo: 1 - Popular | 2 - Luxo: ")
+);
+let rentalDays = parseInt(prompt("Quantos dias de locação: "));
+let kilometersDriven = parseFloat(prompt("Quantos kilômetros rodados: "));
+
+console.log(
+  `Sua locação de um carro do tipo ${
+    typeCar === 1 ? "Popular" : "Luxo"
+  } durante ${rentalDays} dia(s) e com percurso de ${kilometersDriven} km(s) teve um valor total de R$${calculateTrip(
+    typeCar,
+    rentalDays,
+    kilometersDriven
+  ).toFixed(2)}`
+);
+
+function calculateTrip(typeCar, rentalDays, kilometersDriven) {
+  switch (true) {
+    case typeCar === 1 && kilometersDriven <= 100:
+      return (
+        POPULAR_CAR_DAILY * rentalDays +
+        POPULAR_KM_UP_TO_100_KM * kilometersDriven
+      );
+    case typeCar === 1 && kilometersDriven > 100:
+      return (
+        POPULAR_CAR_DAILY * rentalDays +
+        POPULAR_KM_OVER_100_KM * kilometersDriven
+      );
+    case typeCar === 2 && kilometersDriven <= 200:
+      return (
+        LUXURY_CAR_DAILY * rentalDays +
+        LUXURY_KM_UP_TO_200_KM * kilometersDriven
+      );
+    case typeCar === 2 && kilometersDriven > 200:
+      return (
+        LUXURY_CAR_DAILY * rentalDays + LUXURY_KM_OVER_200_KM * kilometersDriven
+      );
+    default:
+      return 0;
+  }
+}
