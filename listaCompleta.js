@@ -224,3 +224,38 @@ function calculateTrip(typeCar, rentalDays, kilometersDriven) {
       return 0;
   }
 }
+
+/* 8. Um programa de vida saudável quer dar pontos por atividades físicas realizadas que
+podem ser trocados por dinheiro. Cada hora de atividade física no mês vale pontos. O
+sistema funciona assim:
+- até 10 h de atividade no mês: ganha 2 pontos por hora
+- de 10 h até 20 h de atividade no mês: ganha 5 pontos por hora
+- acima de 20 h de atividade no mês: ganha 10 pontos por hora
+- A cada ponto ganho, o cliente fatura R$ 0,05 (5 centavos)
+Faça um programa que leia quantas horas de atividade uma pessoa teve por mês.
+Calcule e mostre quantos pontos ela teve e quanto dinheiro ela conseguiu ganhar.
+*/
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+const UP_TO_10_HOURS = 2;
+const BETWEEN_10_AND_20_HOURS = 5;
+const OVER_20_HOURS = 10;
+const POINT_VALUE = 0.05;
+
+let activityHours = parseInt(prompt("Horas de atividade realizadas no mês: "));
+let accumulatedPoints = getAccumulatedPoints(activityHours);
+
+if (activityHours > 0)
+  console.log(
+    `Você realizou ${activityHours} hora(s) de atividades e acumulou ${accumulatedPoints} pontos, seu resgante será de R$${(
+      accumulatedPoints * POINT_VALUE
+    ).toFixed(2)}`
+  );
+else console.log("Você não acumulou pontos.");
+
+function getAccumulatedPoints(activityHours) {
+  if (activityHours > 0 && activityHours <= 10)
+    return activityHours * UP_TO_10_HOURS;
+  else if (activityHours <= 20) return activityHours * BETWEEN_10_AND_20_HOURS;
+  else return activityHours * OVER_20_HOURS;
+}
