@@ -259,3 +259,43 @@ function getAccumulatedPoints(activityHours) {
   else if (activityHours <= 20) return activityHours * BETWEEN_10_AND_20_HOURS;
   else return activityHours * OVER_20_HOURS;
 }
+
+/* 9. Desenvolva um aplicativo que leia o salário e o sexo de vários funcionários. No final,
+mostre o total de salário pago aos homens e o total pago às mulheres. O programa vai
+perguntar ao usuário se ele quer continuar ou não sempre que ler os dados de um
+funcionário.
+*/
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+let continueReading = 1;
+let sumMale = 0;
+let sumFemale = 0;
+let employeeData = [];
+
+class Employee {
+  constructor(gender, salary) {
+    this.gender = gender;
+    this.salary = salary;
+  }
+}
+
+while (continueReading !== 0) {
+  let gender = prompt(
+    "Informe o sexo do funcionário (F - Feminino | M - Masculino): "
+  ).toUpperCase();
+  let salary = parseFloat(prompt("Informe o salário: "));
+  employeeData.push(new Employee(gender, salary));
+  continueReading = parseInt(
+    prompt("Continuar cadastro? (1 - SIM | 0 - NÃO: ")
+  );
+}
+
+employeeData.forEach((e) => {
+  e.gender === "M" ? (sumMale += e.salary) : (sumFemale += e.salary);
+});
+
+console.log(
+  `Total de salários pago aos homens: R$${sumMale.toFixed(
+    2
+  )} e total pago às mulheres: R$${sumFemale.toFixed(2)}`
+);
