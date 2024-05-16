@@ -5,6 +5,8 @@ let exercise = 1;
 function getRandomInt(max, min) {
   return parseInt(Math.floor(Math.random() * (max - min + 1) + min));
 }
+// Variáveis reutilizadas
+let continueReading;
 
 /* 1. Escreva um programa para calcular a redução do tempo de vida de um fumante.
 Pergunte a quantidade de cigarros fumados por dias e quantos anos ele já fumou.
@@ -267,7 +269,7 @@ funcionário.
 */
 console.log(` \n--- EXERCICIO ${exercise++} ---`);
 
-let continueReading = 1;
+continueReading = 1;
 let sumMale = 0;
 let sumFemale = 0;
 let employeeData = [];
@@ -299,3 +301,40 @@ console.log(
     2
   )} e total pago às mulheres: R$${sumFemale.toFixed(2)}`
 );
+
+/* 10. Crie um programa usando a estrutura “faça enquanto” que leia vários números. A
+cada laço, pergunte se o usuário quer continuar ou não. No final, mostre na tela:
+a) O somatório entre todos os valores;
+b) Qual foi o menor valor digitado;
+c) A média entre todos os valores;
+d) Quantos valores são pares.
+*/
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+let listOfNumbers = [];
+
+while (continueReading !== 0) {
+  let number = parseInt(prompt("Informe um número: "));
+  listOfNumbers.push(number);
+  continueReading = parseInt(
+    prompt("Deseja inserir outro número? (1 - SIM | 0 - NÃO: ")
+  );
+}
+
+let sumOfNumbers = 0;
+let lowerValue = listOfNumbers[0];
+let numberOfPairs = 0;
+
+listOfNumbers.forEach((number) => {
+  sumOfNumbers += number;
+  if (number < lowerValue) lowerValue = number;
+  if (number % 2 === 0) numberOfPairs++;
+});
+
+console.log(`A soma dos valores digitados é: ${sumOfNumbers}`);
+console.log(`O menor valor digitado é: ${lowerValue}`);
+console.log(
+  `A média dos valores digitados é: ${(
+    sumOfNumbers / listOfNumbers.length
+  ).toFixed(1)}`
+);
+console.log(`A quantidade de valores pares é: ${numberOfPairs}`);
