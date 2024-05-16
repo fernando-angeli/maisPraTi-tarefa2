@@ -310,6 +310,7 @@ c) A média entre todos os valores;
 d) Quantos valores são pares.
 */
 console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
 let listOfNumbers = [];
 
 while (continueReading !== 0) {
@@ -338,3 +339,22 @@ console.log(
   ).toFixed(1)}`
 );
 console.log(`A quantidade de valores pares é: ${numberOfPairs}`);
+
+/* 11. Desenvolva um programa que leia o primeiro termo e a razão de uma PA (Progressão
+Aritmética), mostrando na tela os 10 primeiros elementos da PA e a soma entre todos os
+valores da sequência.
+ */
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+let firstTerm = parseInt(prompt("Informe o primeiro termo da PA: "));
+let diference = parseInt(prompt("Informe a razão da PA: "));
+let pa = [firstTerm];
+let sumElementsPa = firstTerm;
+
+for (i = 1; i < 10; i++) {
+  pa[i] = pa[i - 1] + diference;
+  sumElementsPa += pa[i];
+}
+
+console.log(pa);
+console.log(sumElementsPa);
