@@ -385,6 +385,16 @@ while (names.length < 7)
 console.log("Ordem inversa dos nomes digitados:");
 for (i = 6; i >= 0; i--) console.log(names[i]);
 
+/* 15. Desenvolva um programa que leia 10 números inteiros e guarde-os em um vetor. No
+final, mostre quais são os números pares que foram digitados e em que posições eles
+estão armazenados.
+ */
+console.log(`--- EXERCICIO ${exercise++} ---`);
+let integers = integersNumbers(10);
+integers.forEach((i, n) => {
+  if (n % 2 === 0) console.log(`Número par: ${n} - posição ${i}`);
+});
+
 /* > Funções auxíliares reutilizaveis */
 //Gerador de números aleatórios por intervalo
 function getRandomInt(max, min) {
