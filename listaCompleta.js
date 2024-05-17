@@ -401,8 +401,8 @@ que eles foram informados.
 console.log(` \n--- EXERCICIO ${exercise++} ---`);
 
 let names = [];
-while(names.length < 10)
+while(names.length < 7)
   names.push(prompt(`Informe o nome ${names.length+1}: `))
 
-for(i = 9; i >= 0; i--)
+for(i = 6; i >= 0; i--)
   console.log(names[i])
