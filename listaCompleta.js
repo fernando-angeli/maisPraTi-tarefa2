@@ -393,3 +393,16 @@ console.log("15 primeiros elementos da sequência de Fibonacci")
 getFibonacci(15).forEach((n, i) => {
   console.log(`${i+1} = ${n}`);
 })
+
+/* 14. Faça um programa que leia 7 nomes de pessoas e guarde-os em um vetor. No final,
+mostre uma listagem com todos os nomes informados, na ordem inversa daquela em
+que eles foram informados.
+ */
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+let names = [];
+while(names.length < 10)
+  names.push(prompt(`Informe o nome ${names.length+1}: `))
+
+for(i = 9; i >= 0; i--)
+  console.log(names[i])
