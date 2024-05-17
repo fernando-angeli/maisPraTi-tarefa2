@@ -358,3 +358,20 @@ for (i = 1; i < 10; i++) {
 
 console.log(pa);
 console.log(sumElementsPa);
+
+/* 12. Faça um programa que mostre os 10 primeiros elementos da Sequência de Fibonacci.
+Ex.: 1, 1, 2, 3, 5, 8, 13, 21.
+ */
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+function getFibonacci(n){
+  let fibonacci = [0,1];
+  for(i = 2; i < n; i++)
+    fibonacci[i] = fibonacci[i-1]+fibonacci[i-2];
+  return fibonacci;
+}
+
+console.log("10 primeiros elementos da sequência de Fibonacci")
+getFibonacci(10).forEach((n, i) => {
+  console.log(`${i+1} = ${n}`);
+})
