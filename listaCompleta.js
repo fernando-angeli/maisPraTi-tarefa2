@@ -2,14 +2,14 @@ const prompt = require("prompt-sync")();
 let exercise = 1;
 
 // Variáveis reutilizadas
-let continueReading;
+let continueReading = 1;
 
 /* 1. Escreva um programa para calcular a redução do tempo de vida de um fumante.
 Pergunte a quantidade de cigarros fumados por dias e quantos anos ele já fumou.
 Considere que um fumante perde 10 min de vida a cada cigarro. Calcule quantos dias de
 vida um fumante perderá e exiba o total em dias.
 */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 let cigarettesPerDay = parseInt(prompt("Quantos cigarros você fuma por dia? "));
 
 if (cigarettesPerDay === 0) {
@@ -32,7 +32,7 @@ function lostDaysOfLife(cigarettesPerDay, yearsHeSmoked) {
 exiba uma mensagem dizendo que o usuário foi multado. Nesse caso, exiba o valor da multa,
 cobrando R$ 5,00 por cada Km acima da velocidade permitida.
 */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 const PERMITTED_SPEED = 79;
 const FINE_VALUE = 5.0;
 let speed = parseInt(prompt("Informe a velocidade do veículo: "));
@@ -50,7 +50,7 @@ function calculateFine(speed) {
 Km. Calcule o preço da passagem, cobrando R$ 0.50 por Km para viagens até 200 Km e
 R$ 0.45 para viagens mais longas.
 */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 
 let distance = parseInt(prompt("Informe a distância a ser percorrida: "));
 const DISTANCE_UP_TO_200 = 0.5;
@@ -67,7 +67,7 @@ comprimentos e diga se é possível formar um triângulo com essas retas.
 Matematicamente, para três segmentos formarem um triângulo, o comprimento de cada
 lado deve ser menor que a soma dos outros dois.
 */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 
 let measureSides = new Array(3);
 for (i = 0; i < measureSides.length; i++)
@@ -83,7 +83,7 @@ function checkMeasures(measures) {
 
 /* 5. Crie um jogo de JoKenPo (Pedra-Papel-Tesoura).
  */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 console.log("--- Vamos jogar JoKenPo ---");
 
 let win = false;
@@ -140,7 +140,7 @@ function identifier(player) {
 /* 6. Crie um jogo onde o computador vai sortear um número entre 1 e 5. O jogador vai
 tentar descobrir qual foi o valor sorteado. 
 */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 
 let drawnNumber = getRandomInt(1, 5);
 console.log("Tente adivinhar o número escolhido entre 1 e 5: ");
@@ -168,7 +168,7 @@ Carros de luxo
 - Até 200 Km percorridos: R$ 0,30 por Km
 - Acima de 200 Km percorridos: R$ 0,25 por Km
 */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 
 const POPULAR_CAR_DAILY = 90.0;
 const POPULAR_KM_UP_TO_100_KM = 0.2;
@@ -229,7 +229,7 @@ sistema funciona assim:
 Faça um programa que leia quantas horas de atividade uma pessoa teve por mês.
 Calcule e mostre quantos pontos ela teve e quanto dinheiro ela conseguiu ganhar.
 */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 
 const UP_TO_10_HOURS = 2;
 const BETWEEN_10_AND_20_HOURS = 5;
@@ -259,7 +259,7 @@ mostre o total de salário pago aos homens e o total pago às mulheres. O progra
 perguntar ao usuário se ele quer continuar ou não sempre que ler os dados de um
 funcionário.
 */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 
 continueReading = 1;
 let sumMale = 0;
@@ -280,7 +280,7 @@ while (continueReading !== 0) {
   let salary = parseFloat(prompt("Informe o salário: "));
   employeeData.push(new Employee(gender, salary));
   continueReading = parseInt(
-    prompt("Continuar cadastro? (1 - SIM | 0 - NÃO: ")
+    prompt("Continuar cadastro? (1 - SIM | 0 - NÃO): ")
   );
 }
 
@@ -301,7 +301,8 @@ b) Qual foi o menor valor digitado;
 c) A média entre todos os valores;
 d) Quantos valores são pares.
 */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
+continueReading = 1;
 
 let listOfNumbers = [];
 
@@ -309,7 +310,7 @@ while (continueReading !== 0) {
   let number = parseInt(prompt("Informe um número: "));
   listOfNumbers.push(number);
   continueReading = parseInt(
-    prompt("Deseja inserir outro número? (1 - SIM | 0 - NÃO: ")
+    prompt("Deseja inserir outro número? (1 - SIM | 0 - NÃO): ")
   );
 }
 
@@ -336,7 +337,7 @@ console.log(`A quantidade de valores pares é: ${numberOfPairs}`);
 Aritmética), mostrando na tela os 10 primeiros elementos da PA e a soma entre todos os
 valores da sequência.
  */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 
 let firstTerm = parseInt(prompt("Informe o primeiro termo da PA: "));
 let diference = parseInt(prompt("Informe a razão da PA: "));
@@ -354,45 +355,53 @@ console.log(sumElementsPa);
 /* 12. Faça um programa que mostre os 10 primeiros elementos da Sequência de Fibonacci.
 Ex.: 1, 1, 2, 3, 5, 8, 13, 21.
  */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 
 console.log("10 primeiros elementos da sequência de Fibonacci");
 getFibonacci(10).forEach((n, i) => {
   console.log(`${i + 1} = ${n}`);
 });
 
-function getFibonacci(n) {
-  let fibonacci = [0, 1];
-  for (i = 2; i < n; i++) fibonacci[i] = fibonacci[i - 1] + fibonacci[i - 2];
-  return fibonacci;
-}
-
 /* 13. Crie um programa que preencha automaticamente (usando lógica, não apenas
 atribuindo diretamente) um vetor numérico com 15 posições com os primeiros elementos
 da sequência de Fibonacci.
  */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 
 console.log("15 primeiros elementos da sequência de Fibonacci");
-
 getFibonacci(15).forEach((n, i) => {
   console.log(`${i + 1} = ${n}`);
 });
-
-function getFibonacci(n) {
-  let fibonacci = [0, 1];
-  for (i = 2; i < n; i++) fibonacci[i] = fibonacci[i - 1] + fibonacci[i - 2];
-  return fibonacci;
-}
 
 /* 14. Faça um programa que leia 7 nomes de pessoas e guarde-os em um vetor. No final,
 mostre uma listagem com todos os nomes informados, na ordem inversa daquela em
 que eles foram informados.
  */
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
+console.log(`--- EXERCICIO ${exercise++} ---`);
 
 let names = [];
 while (names.length < 7)
   names.push(prompt(`Informe o nome ${names.length + 1}: `));
 console.log("Ordem inversa dos nomes digitados:");
 for (i = 6; i >= 0; i--) console.log(names[i]);
+
+/* > Funções auxíliares reutilizaveis */
+//Gerador de números aleatórios por intervalo
+function getRandomInt(max, min) {
+  return parseInt(Math.floor(Math.random() * (max - min + 1) + min));
+}
+//Gerador de sequência Fibonacci até n valores
+function getFibonacci(n) {
+  let fibonacci = [0, 1];
+  for (i = 2; i < n; i++) fibonacci[i] = fibonacci[i - 1] + fibonacci[i - 2];
+  return fibonacci;
+}
+//Leitor de números inteiros até n valores - retorna array
+function integersNumbers(n) {
+  let integersNumbers = [];
+  while (integersNumbers.length < 10)
+    integersNumbers.push(
+      prompt(`Informe o número ${integersNumbers.length + 1}: `)
+    );
+  return integersNumbers;
+}
