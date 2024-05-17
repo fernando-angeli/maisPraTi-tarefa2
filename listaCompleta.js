@@ -395,6 +395,24 @@ integers.forEach((i, n) => {
   if (n % 2 === 0) console.log(`Número par: ${n} - posição ${i}`);
 });
 
+/* 16. Crie uma lógica que preencha um vetor de 20 posições com números aleatórios
+(entre 0 e 99) gerados pelo computador. Logo em seguida, mostre os números gerados e
+depois coloque o vetor em ordem crescente, mostrando no final os valores ordenados.
+ */
+console.log(`--- EXERCICIO ${exercise++} ---`);
+
+let randomNumbers20 = [];
+while (randomNumbers20.length < 20) {
+  let number = getRandomInt(0, 99);
+  if (!randomNumbers20.includes(number)) randomNumbers20.push(number);
+}
+console.log(randomNumbers20);
+
+randomNumbers20.sort((a, b) => {
+  return a - b;
+});
+console.log(randomNumbers20);
+
 /* > Funções auxíliares reutilizaveis */
 //Gerador de números aleatórios por intervalo
 function getRandomInt(max, min) {
