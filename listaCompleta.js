@@ -1,54 +1,50 @@
 const prompt = require("prompt-sync")();
 let exercise = 1;
 
-// Funções auxíliares reutilizaveis
-function getRandomInt(max, min) {
-  return parseInt(Math.floor(Math.random() * (max - min + 1) + min));
-}
 // Variáveis reutilizadas
-let continueReading;
+//let continueReading;
 
-/* 1. Escreva um programa para calcular a redução do tempo de vida de um fumante.
-Pergunte a quantidade de cigarros fumados por dias e quantos anos ele já fumou.
-Considere que um fumante perde 10 min de vida a cada cigarro. Calcule quantos dias de
-vida um fumante perderá e exiba o total em dias.
-*/
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
-let cigarettesPerDay = parseInt(prompt("Quantos cigarros você fuma por dia? "));
+// /* 1. Escreva um programa para calcular a redução do tempo de vida de um fumante.
+// Pergunte a quantidade de cigarros fumados por dias e quantos anos ele já fumou.
+// Considere que um fumante perde 10 min de vida a cada cigarro. Calcule quantos dias de
+// vida um fumante perderá e exiba o total em dias.
+// */
+// console.log(` \n--- EXERCICIO ${exercise++} ---`);
+// let cigarettesPerDay = parseInt(prompt("Quantos cigarros você fuma por dia? "));
 
-if (cigarettesPerDay === 0) {
-  console.log("Parabéns por não fumar!");
-} else {
-  let yearsHeSmoked = parseFloat(prompt("Fuma há quantos anos? "));
-  console.log(
-    `Você já perdeu: ${lostDaysOfLife(
-      cigarettesPerDay,
-      yearsHeSmoked
-    )} dia(s) de vida.`
-  );
-}
+// if (cigarettesPerDay === 0) {
+//   console.log("Parabéns por não fumar!");
+// } else {
+//   let yearsHeSmoked = parseFloat(prompt("Fuma há quantos anos? "));
+//   console.log(
+//     `Você já perdeu: ${lostDaysOfLife(
+//       cigarettesPerDay,
+//       yearsHeSmoked
+//     )} dia(s) de vida.`
+//   );
+// }
 
-function lostDaysOfLife(cigarettesPerDay, yearsHeSmoked) {
-  return Math.floor((cigarettesPerDay * 10 * (365 * yearsHeSmoked)) / 1440, 0);
-}
+// function lostDaysOfLife(cigarettesPerDay, yearsHeSmoked) {
+//   return Math.floor((cigarettesPerDay * 10 * (365 * yearsHeSmoked)) / 1440, 0);
+// }
 
-/* 2. Escreva um programa que pergunte a velocidade de um carro. Caso ultrapasse 80 Km/h-1, 
-exiba uma mensagem dizendo que o usuário foi multado. Nesse caso, exiba o valor da multa, 
-cobrando R$ 5,00 por cada Km acima da velocidade permitida.
-*/
-console.log(` \n--- EXERCICIO ${exercise++} ---`);
-const PERMITTED_SPEED = 79;
-const FINE_VALUE = 5.0;
-let speed = parseInt(prompt("Informe a velocidade do veículo: "));
-console.log(
-  speed > PERMITTED_SPEED
-    ? `Multa de R$ ${calculateFine(speed).toFixed(2)}`
-    : "Velocidade permitida."
-);
+// /* 2. Escreva um programa que pergunte a velocidade de um carro. Caso ultrapasse 80 Km/h-1,
+// exiba uma mensagem dizendo que o usuário foi multado. Nesse caso, exiba o valor da multa,
+// cobrando R$ 5,00 por cada Km acima da velocidade permitida.
+// */
+// console.log(` \n--- EXERCICIO ${exercise++} ---`);
+// const PERMITTED_SPEED = 79;
+// const FINE_VALUE = 5.0;
+// let speed = parseInt(prompt("Informe a velocidade do veículo: "));
+// console.log(
+//   speed > PERMITTED_SPEED
+//     ? `Multa de R$ ${calculateFine(speed).toFixed(2)}`
+//     : "Velocidade permitida."
+// );
 
-function calculateFine(speed) {
-  return (speed - PERMITTED_SPEED) * FINE_VALUE;
-}
+// function calculateFine(speed) {
+//   return (speed - PERMITTED_SPEED) * FINE_VALUE;
+// }
 
 /* 3. Faça um algoritmo que pergunte a distância que um passageiro deseja percorrer em
 Km. Calcule o preço da passagem, cobrando R$ 0.50 por Km para viagens até 200 Km e
@@ -56,19 +52,15 @@ R$ 0.45 para viagens mais longas.
 */
 console.log(` \n--- EXERCICIO ${exercise++} ---`);
 
-let distance = parseFloat(prompt("Informe a distância a ser percorrida: "));
+let distance = parseInt(prompt("Informe a distância a ser percorrida: "));
 const DISTANCE_UP_TO_200 = 0.5;
 const DISTANCE_MORE_THAN_200 = 0.45;
-
 console.log(
-  `O valor da viagem será de R$ ${calculateTrip(distance).toFixed(2)}`
-);
-
-function calculateTrip(distance) {
-  return distance <= 200
+  `O valor da viagem será de R$ ${(distance <= 200
     ? distance * DISTANCE_UP_TO_200
-    : distance * DISTANCE_MORE_THAN_200;
-}
+    : distance * DISTANCE_MORE_THAN_200
+  ).toFixed(2)}`
+);
 
 /* 4. Crie um programa que leia o tamanho de três segmentos de reta. Analise seus
 comprimentos e diga se é possível formar um triângulo com essas retas.
@@ -364,17 +356,16 @@ Ex.: 1, 1, 2, 3, 5, 8, 13, 21.
  */
 console.log(` \n--- EXERCICIO ${exercise++} ---`);
 
-function getFibonacci(n){
-  let fibonacci = [0,1];
-  for(i = 2; i < n; i++)
-    fibonacci[i] = fibonacci[i-1]+fibonacci[i-2];
+console.log("10 primeiros elementos da sequência de Fibonacci");
+getFibonacci(10).forEach((n, i) => {
+  console.log(`${i + 1} = ${n}`);
+});
+
+function getFibonacci(n) {
+  let fibonacci = [0, 1];
+  for (i = 2; i < n; i++) fibonacci[i] = fibonacci[i - 1] + fibonacci[i - 2];
   return fibonacci;
 }
-
-console.log("10 primeiros elementos da sequência de Fibonacci")
-getFibonacci(10).forEach((n, i) => {
-  console.log(`${i+1} = ${n}`);
-})
 
 /* 13. Crie um programa que preencha automaticamente (usando lógica, não apenas
 atribuindo diretamente) um vetor numérico com 15 posições com os primeiros elementos
@@ -382,17 +373,17 @@ da sequência de Fibonacci.
  */
 console.log(` \n--- EXERCICIO ${exercise++} ---`);
 
-function getFibonacci(n){
-  let fibonacci = [0,1];
-  for(i = 2; i < n; i++)
-    fibonacci[i] = fibonacci[i-1]+fibonacci[i-2];
+console.log("15 primeiros elementos da sequência de Fibonacci");
+
+getFibonacci(15).forEach((n, i) => {
+  console.log(`${i + 1} = ${n}`);
+});
+
+function getFibonacci(n) {
+  let fibonacci = [0, 1];
+  for (i = 2; i < n; i++) fibonacci[i] = fibonacci[i - 1] + fibonacci[i - 2];
   return fibonacci;
 }
-
-console.log("15 primeiros elementos da sequência de Fibonacci")
-getFibonacci(15).forEach((n, i) => {
-  console.log(`${i+1} = ${n}`);
-})
 
 /* 14. Faça um programa que leia 7 nomes de pessoas e guarde-os em um vetor. No final,
 mostre uma listagem com todos os nomes informados, na ordem inversa daquela em
@@ -401,8 +392,7 @@ que eles foram informados.
 console.log(` \n--- EXERCICIO ${exercise++} ---`);
 
 let names = [];
-while(names.length < 7)
-  names.push(prompt(`Informe o nome ${names.length+1}: `))
-
-for(i = 6; i >= 0; i--)
-  console.log(names[i])
+while (names.length < 7)
+  names.push(prompt(`Informe o nome ${names.length + 1}: `));
+console.log("Ordem inversa dos nomes digitados:");
+for (i = 6; i >= 0; i--) console.log(names[i]);
