@@ -413,6 +413,22 @@ randomNumbers20.sort((a, b) => {
 });
 console.log(randomNumbers20);
 
+/* 17. Crie um programa que leia o nome e a idade de 9 pessoas e guarde esses valores em
+dois vetores, em posições relacionadas. No final, mostre uma listagem contendo apenas
+os dados das pessoas menores de idade.
+ */
+console.log(`--- EXERCICIO ${exercise++} ---`);
+
+names = []; // já declarado em outro exercício
+let years = [];
+for (i = 0; i < 9; i++) {
+  names.push(prompt(`Informe o nome do usuário ${i + 1}: `));
+  years.push(parseInt(prompt(`Informe a idade do usuário ${i + 1}: `)));
+}
+console.log("Pessoas menores de idade:");
+for (i = 0; i < years.length; i++)
+  if (years[i] < 18) console.log(`Nome: ${names[i]}, idade: ${years[i]}`);
+
 /* > Funções auxíliares reutilizaveis */
 //Gerador de números aleatórios por intervalo
 function getRandomInt(max, min) {
