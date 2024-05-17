@@ -375,3 +375,21 @@ console.log("10 primeiros elementos da sequência de Fibonacci")
 getFibonacci(10).forEach((n, i) => {
   console.log(`${i+1} = ${n}`);
 })
+
+/* 13. Crie um programa que preencha automaticamente (usando lógica, não apenas
+atribuindo diretamente) um vetor numérico com 15 posições com os primeiros elementos
+da sequência de Fibonacci.
+ */
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+function getFibonacci(n){
+  let fibonacci = [0,1];
+  for(i = 2; i < n; i++)
+    fibonacci[i] = fibonacci[i-1]+fibonacci[i-2];
+  return fibonacci;
+}
+
+console.log("15 primeiros elementos da sequência de Fibonacci")
+getFibonacci(15).forEach((n, i) => {
+  console.log(`${i+1} = ${n}`);
+})
