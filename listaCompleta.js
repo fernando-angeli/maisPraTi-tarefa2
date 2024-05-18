@@ -429,6 +429,22 @@ console.log("Pessoas menores de idade:");
 for (i = 0; i < years.length; i++)
   if (years[i] < 18) console.log(`Nome: ${names[i]}, idade: ${years[i]}`);
 
+/* 18. Crie um registro com o nome do funcionário, cargo e salário. Leia este registro para
+um funcionário e ao final escreva o conteúdo do registro.
+ */
+console.log(` \n--- EXERCICIO ${exercise++} ---`);
+
+let employee = { name: "", position: "", salary: 0 };
+employee.name = prompt("Digite o nome: ");
+employee.position = prompt("Digite o cargo: ");
+employee.salary = parseFloat(prompt("Digite o salário: "));
+
+console.log(
+  `Nome: ${employee.name} - Cargo: ${
+    employee.position
+  } - Salário R$${employee.salary.toFixed(2)}`
+);
+
 /* > Funções auxíliares reutilizaveis */
 //Gerador de números aleatórios por intervalo
 function getRandomInt(max, min) {
