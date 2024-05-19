@@ -138,7 +138,7 @@ function identifier(player) {
 }
 
 /* 6. Crie um jogo onde o computador vai sortear um número entre 1 e 5. O jogador vai
-tentar descobrir qual foi o valor sorteado. 
+tentar descobrir qual foi o valor sorteado.
 */
 exercise();
 
@@ -350,7 +350,7 @@ for (i = 1; i < 10; i++) {
 }
 
 console.log(pa);
-console.log(sumElementsPa);
+console.log("Soma dos elementos:", sumElementsPa);
 
 /* 12. Faça um programa que mostre os 10 primeiros elementos da Sequência de Fibonacci.
 Ex.: 1, 1, 2, 3, 5, 8, 13, 21.
@@ -478,6 +478,65 @@ function validateTime(time) {
   )
     response += "Segundos inválidos.";
   return response;
+}
+
+/* 20. Uma indústria faz a folha mensal de pagamentos de seus 80 empregados baseada
+no seguinte: existe uma tabela com os dados de cada funcionalidade: matrícula, nome e
+salário bruto. Escreva um programa que leia e processe a tabela e emita (escreva na
+tela), cada funcionário, seu contracheque, cujo formato é dado a seguir:
+Matrícula:
+Nome:
+Salário bruto:
+Dedução INSS:
+Salário líquido:
+(Dicas: desconto de 12%, salário líquido é a diferença entre salário bruto e a redução do
+INSS).
+ */
+exercise();
+let employeeData20 = [];
+const INSS_ALIQUOT = 0.12;
+continueReading = 1;
+
+class Employee20 {
+  constructor(registry, name, grossPay, inss, netPay) {
+    this.registry = registry;
+    this.name = name;
+    this.grossPay = grossPay;
+    this.inss = grossPay * INSS_ALIQUOT;
+    this.netPay = this.grossPay - this.inss;
+  }
+}
+
+while (continueReading === 1) {
+  let registry;
+  do {
+    registry = parseInt(prompt("Informe o número de matrícula: "));
+  } while (!validateRegistry(registry));
+  let name = prompt("Informe o nome: ");
+  let grossPay = parseFloat(prompt("Informe o salário: "));
+  employeeData20.push(new Employee20(registry, name, grossPay));
+  continueReading = parseInt(
+    prompt("Deseja inserir outro funcionário? (1 - SIM | 0 - NÃO): ")
+  );
+}
+
+employeeData20.forEach((e) => {
+  console.log(`
+Matrícula: ${e.registry}
+Nome: ${e.name}
+Salário bruto: R$ ${e.grossPay.toFixed(2)}
+Dedução de INSS: R$ ${e.inss.toFixed(2)}
+Salário líquido: R$ ${e.netPay.toFixed(2)}
+`);
+});
+
+function validateRegistry(registry) {
+  for (e of employeeData20)
+    if (e.registry === registry) {
+      console.log("Matrícula já utilizada, informe outro valor.");
+      return false;
+    }
+  return true;
 }
 
 /* > Funções auxíliares reutilizaveis */
