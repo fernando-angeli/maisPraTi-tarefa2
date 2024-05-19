@@ -445,6 +445,41 @@ console.log(
   } - Salário R$${employee.salary.toFixed(2)}`
 );
 
+/* 19. Escrever um programa para ler 5 horários. Validar cada horário fornecendo através de
+repetição. Escrever cada um deles no formato HH.MM.SS.
+ */
+exercise();
+let timings = [];
+while (timings.length < 5) {
+  let read = prompt(
+    `Informe 5 horários no formato HH:MM:SS (${timings.length + 1} de 5): `
+  );
+  let error = validateTime(read.split(":"));
+
+  if (error === "") {
+    timings.push(read);
+  } else console.log(`ERRO - ${error}`);
+}
+timings.forEach((time) => {
+  console.log(time);
+});
+
+function validateTime(time) {
+  let response = "",
+    hours = parseInt(time[0]),
+    minutes = parseInt(time[1]),
+    seconds = parseInt(time[2]);
+  if (hours < 0 || hours > 23) response += "Hora inválida. ";
+  if (minutes < 0 || minutes > 59) response += "Minutos inválidos. ";
+  if (
+    (hours === 0 && minutes === 0 && seconds === 0) ||
+    seconds < 0 ||
+    seconds > 59
+  )
+    response += "Segundos inválidos.";
+  return response;
+}
+
 /* > Funções auxíliares reutilizaveis */
 //Gerar mensagem inicio das questões
 function exercise() {
@@ -466,7 +501,7 @@ function getFibonacci(n) {
 //Leitor de números inteiros até n valores - retorna array
 function integersNumbers(n) {
   let integersNumbers = [];
-  while (integersNumbers.length < 10)
+  while (integersNumbers.length < n)
     integersNumbers.push(
       prompt(`Informe o número ${integersNumbers.length + 1}: `)
     );
