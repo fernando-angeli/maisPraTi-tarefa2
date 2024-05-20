@@ -605,6 +605,37 @@ function calculateAverages(people) {
   `);
 }
 
+/* 23. Criar e imprimir a matriz identidade MI[1..7,1..7] em que todos os elementos da
+diagonal principal são iguais a 1 e os demais são nulos.
+ */
+exercise();
+
+printMatrix(identityMatrix(7));
+
+function identityMatrix(size) {
+  let matrix = [];
+  console.log(`Matriz ${size} x ${size}`);
+  for (i = 0; i < size; i++) {
+    let line = [];
+    for (j = 0; j < size; j++) {
+      line[j] = i === j ? 1 : 0;
+    }
+    matrix[i] = line;
+  }
+  return matrix;
+}
+
+function printMatrix(matrix) {
+  for (i = 0; i < matrix.length; i++) {
+    let line = "";
+    for (j = 0; j < matrix[i].length; j++) {
+      line += matrix[i][j];
+      if (j < matrix[i].length - 1) line += " - ";
+    }
+    console.log(line);
+  }
+}
+
 /* > Funções auxíliares reutilizaveis */
 //Gerar mensagem inicio das questões
 function exercise() {
