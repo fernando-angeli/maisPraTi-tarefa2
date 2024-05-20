@@ -644,6 +644,25 @@ console.log(`Quantidade de elementos negativos por linha:
 [${c}]
 `);
 
+/* 25. Faça um algoritmo que leia uma matriz de 15 X 20 de números reais e mostre a soma
+de cada coluna separadamente.
+ */
+exercise();
+let matrix25 = matrix(15, 20, -9, 9);
+let sumElementsMatrix = [];
+
+for (i = 0; i < matrix25.length; i++) {
+  let sum = 0;
+  for (j = 0; j < matrix25[i].length; j++) {
+    sum += matrix25[i][j];
+  }
+  sumElementsMatrix[i] = sum;
+}
+
+console.log(`A soma dos elementos de cada linha:
+[${sumElementsMatrix}]
+`);
+
 /* 
 > Funções auxíliares reutilizaveis 
 */
