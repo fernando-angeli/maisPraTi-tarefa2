@@ -461,7 +461,7 @@ while (timings.length < 5) {
   } else console.log(`ERRO - ${error}`);
 }
 timings.forEach((time) => {
-  console.log(time);
+  console.log(time.replace(/:/g, "."));
 });
 
 function validateTime(time) {
