@@ -555,6 +555,56 @@ function idealWeight(alt, sex) {
     : `Seu peso ideal é ${(62.1 * alt - 44.7).toFixed(1)}kg`;
 }
 
+/* 22. A prefeitura de uma cidade fez uma pesquisa entre os seus habitantes, coletando
+dados sobre o salário e número de filhos. Faça uma função que leia esses dados para um
+número não determinado de pessoas e retorne a média de salário da população, a
+média do número de filhos, o maior salário e o percentual de pessoas com salário até R$
+350,00.
+ */
+exercise();
+continueReading = 1;
+let people = peopleReader();
+calculateAverages(people);
+
+function peopleReader() {
+  let peopleReader = [];
+  let person = {
+    pay: "",
+    numberOfChildren: "",
+  };
+  while (continueReading === 1) {
+    person.pay = parseFloat(prompt("Informe o salário: "));
+    person.numberOfChildren = parseInt(prompt("Informe o número de filhos: "));
+    peopleReader.push({ ...person });
+    continueReading = parseInt(
+      prompt("Deseja inserir outro funcionário? (1 - SIM | 0 - NÃO): ")
+    );
+  }
+  return peopleReader;
+}
+
+function calculateAverages(people) {
+  let averagePay = 0,
+    averageChildren = 0,
+    highestPay = 0,
+    payUpTo350 = 0;
+  people.forEach((p) => {
+    averagePay += p.pay;
+    if (p.pay > highestPay) highestPay = p.pay;
+    averageChildren += p.numberOfChildren;
+    if (p.pay <= 350) payUpTo350++;
+  });
+  return console.log(`
+  Média de salário: R$ ${(averagePay / people.length).toFixed(2)}
+  Média de filhos: ${Math.round(averageChildren / people.length)}
+  Maior salário: R$ ${highestPay.toFixed(2)}
+  Percentual de habitantes com renda até R$350,00: ${(
+    (payUpTo350 / people.length) *
+    100
+  ).toFixed(1)}%
+  `);
+}
+
 /* > Funções auxíliares reutilizaveis */
 //Gerar mensagem inicio das questões
 function exercise() {
