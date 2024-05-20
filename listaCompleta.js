@@ -630,7 +630,7 @@ quantidade de elementos negativos da linha correspondente de M.
  */
 exercise();
 
-let matrix24 = matrix(6, 8, 9);
+let matrix24 = matrix(6, 8, -9, 9);
 let c = [matrix24.length];
 for (i = 0; i < matrix24.length; i++) {
   let count = 0;
@@ -654,8 +654,8 @@ function exercise() {
 }
 
 //Gerador de números aleatórios por intervalo
-function getRandomInt(max, min) {
-  return parseInt(Math.floor(Math.random() * (max - min + 1) + min));
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 //Gerador de sequência Fibonacci até n valores
@@ -676,13 +676,13 @@ function integersNumbers(n) {
 }
 
 //Gerar matriz - linhas x colunas - números aleatórios
-function matrix(rows, columns, range) {
+function matrix(rows, columns, max, min) {
   let matrix = [];
   console.log(`Matriz ${rows} x ${columns}`);
   for (i = 0; i < rows; i++) {
     let line = [];
     for (j = 0; j < columns; j++) {
-      line[j] = getRandomInt(-range, range);
+      line[j] = getRandomInt(max, min);
     }
     matrix[i] = line;
   }
