@@ -625,18 +625,29 @@ function identityMatrix(size) {
   return matrix;
 }
 
-function printMatrix(matrix) {
-  for (i = 0; i < matrix.length; i++) {
-    let line = "";
-    for (j = 0; j < matrix[i].length; j++) {
-      line += matrix[i][j];
-      if (j < matrix[i].length - 1) line += " - ";
-    }
-    console.log(line);
+/* 24. Dada uma matriz M[1..6,1..8], criar um vetor C que contenha, em cada posição, a
+quantidade de elementos negativos da linha correspondente de M.
+ */
+exercise();
+
+let matrix24 = matrix(6, 8, 9);
+let c = [matrix24.length];
+for (i = 0; i < matrix24.length; i++) {
+  let count = 0;
+  for (j = 0; j < matrix24[i].length; j++) {
+    if (matrix24[i][j] < 0) count++;
   }
+  c[i] = count;
 }
 
-/* > Funções auxíliares reutilizaveis */
+console.log(`Quantidade de elementos negativos por linha:
+[${c}]
+`);
+
+/* 
+> Funções auxíliares reutilizaveis 
+*/
+
 //Gerar mensagem inicio das questões
 function exercise() {
   return console.log(`\n --- EXERCICIO ${exerciseNumber++} ---`);
@@ -662,4 +673,31 @@ function integersNumbers(n) {
       prompt(`Informe o número ${integersNumbers.length + 1}: `)
     );
   return integersNumbers;
+}
+
+//Gerar matriz - linhas x colunas - números aleatórios
+function matrix(rows, columns, range) {
+  let matrix = [];
+  console.log(`Matriz ${rows} x ${columns}`);
+  for (i = 0; i < rows; i++) {
+    let line = [];
+    for (j = 0; j < columns; j++) {
+      line[j] = getRandomInt(-range, range);
+    }
+    matrix[i] = line;
+  }
+  printMatrix(matrix);
+  return matrix;
+}
+
+//Printar matrix - chamando no método de geração
+function printMatrix(matrix) {
+  for (i = 0; i < matrix.length; i++) {
+    let line = "";
+    for (j = 0; j < matrix[i].length; j++) {
+      line += matrix[i][j] >= 0 ? ` ${matrix[i][j]}` : matrix[i][j];
+      if (j < matrix[i].length - 1) line += " | ";
+    }
+    console.log(line);
+  }
 }
