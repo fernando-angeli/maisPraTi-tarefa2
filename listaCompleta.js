@@ -663,6 +663,25 @@ console.log(`A soma dos elementos de cada linha:
 [${sumElementsMatrix}]
 `);
 
+/* 26. Dadas duas matrizes numéricas A[1..3,1..5] e B[1..3,1..5], calcular a matriz produto
+P[1..3,1..5].
+ */
+exercise();
+let matrixA = matrix(3, 5, 1, 3);
+let matrixB = matrix(3, 5, 1, 3);
+let productAB = [];
+
+for (i = 0; i < matrixA.length; i++) {
+  let line = [];
+  for (j = 0; j < matrixA[i].length; j++) {
+    line[j] = matrixA[i][j] * matrixB[i][j];
+  }
+  productAB[i] = line;
+}
+
+console.log(`O produto da matrizA e matrizB é`);
+printMatrix(productAB);
+
 /* 
 > Funções auxíliares reutilizaveis 
 */
@@ -695,13 +714,13 @@ function integersNumbers(n) {
 }
 
 //Gerar matriz - linhas x colunas - números aleatórios
-function matrix(rows, columns, max, min) {
+function matrix(rows, columns, min, max) {
   let matrix = [];
   console.log(`Matriz ${rows} x ${columns}`);
   for (i = 0; i < rows; i++) {
     let line = [];
     for (j = 0; j < columns; j++) {
-      line[j] = getRandomInt(max, min);
+      line[j] = getRandomInt(min, max);
     }
     matrix[i] = line;
   }
@@ -715,7 +734,7 @@ function printMatrix(matrix) {
     let line = "";
     for (j = 0; j < matrix[i].length; j++) {
       line += matrix[i][j] >= 0 ? ` ${matrix[i][j]}` : matrix[i][j];
-      if (j < matrix[i].length - 1) line += " | ";
+      if (j < matrix[i].length - 1) line += " |";
     }
     console.log(line);
   }
