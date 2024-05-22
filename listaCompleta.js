@@ -1,4 +1,5 @@
 const prompt = require("prompt-sync")();
+const colors = require("colors");
 let exerciseNumber = 1;
 
 // Variáveis reutilizadas
@@ -701,32 +702,43 @@ for (i = 0; i < matrix27.length; i++) {
 console.log("Matriz resultado da multiplicação: ");
 printMatrix(matrixResult);
 
-/*
-28. Fazer um algoritmo para receber uma matriz 10 x 10 e devolver o resultado pedido no
-item:
+/* 28. Fazer um algoritmo para receber uma matriz 10 x 10 e devolver o resultado pedido no item:
 a) a soma dos elementos acima da diagonal principal;
 b) a soma dos elementos abaixo da diagonal principal;
- */
+*/
 exercise();
 let matrix28 = matrix(10, 10, 1, 1);
 let elementsAbove = 0;
 let elementsBelow = 0;
-for (i = 0; i < matrix28.length; i++) {
-  for (j = i + 1; j < matrix28[i].length; j++) {
-    elementsAbove += matrix28[i][j];
-  }
+
+addElementsAboveAndBelowTheDiagonal(matrix28);
+
+function addElementsAboveAndBelowTheDiagonal(matrix) {
+  matrix28.forEach((row, i) => {
+    row.map((element, j) => {
+      if (i < j) elementsAbove += element;
+      else if (i > j) elementsBelow += element;
+    });
+  });
+  console.log(
+    `Soma dos elementos acima da diagonal principal = ${elementsAbove}`.yellow
+  );
+  console.log(
+    `Soma dos elementos abaixo da diagonal principal = ${elementsBelow}`.blue
+  );
+  displayColorMatrix(matrix28);
 }
 
-for (i = matrix28.length - 1; i >= 0; i--) {
-  for (j = i - 1; j >= 0; j--) {
-    elementsBelow += matrix28[i][j];
-  }
+function displayColorMatrix(matrix) {
+  matrix.forEach((row, i) => {
+    let coloredRow = row.map((element, j) => {
+      if (i < j) return element.toString().yellow;
+      else if (i > j) return element.toString().blue;
+      else return element.toString();
+    });
+    console.log(` ${coloredRow.join(" | ")}`);
+  });
 }
-
-console.log(`
-Soma dos elementos acima da diagonal principal = ${elementsAbove}
-Soma dos elementos abaixo da diagonal principal = ${elementsBelow}
-`);
 
 /* 
 > Funções auxíliares reutilizaveis 
@@ -774,7 +786,7 @@ function matrix(rows, columns, min, max) {
   return matrix;
 }
 
-//Printar matrix - chamando no método de geração
+//Printar matriz - chamando no método de geração
 function printMatrix(matrix) {
   for (i = 0; i < matrix.length; i++) {
     let line = "";
@@ -784,4 +796,17 @@ function printMatrix(matrix) {
     }
     console.log(line);
   }
+}
+
+//Printar matriz com forEach e map - pode ser passada cor por parâmetro
+function printColorMatrix(matrix, color) {
+  matrix.forEach((row, i) => {
+    let line = " ";
+    row.map((element, j) => {
+      line += element;
+      if (j < row.length - 1) line += " | ";
+    });
+    if (color !== undefined) console.log(line.toString()[color]);
+    else console.log(line);
+  });
 }
