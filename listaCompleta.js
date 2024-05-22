@@ -701,6 +701,33 @@ for (i = 0; i < matrix27.length; i++) {
 console.log("Matriz resultado da multiplicação: ");
 printMatrix(matrixResult);
 
+/*
+28. Fazer um algoritmo para receber uma matriz 10 x 10 e devolver o resultado pedido no
+item:
+a) a soma dos elementos acima da diagonal principal;
+b) a soma dos elementos abaixo da diagonal principal;
+ */
+exercise();
+let matrix28 = matrix(10, 10, 1, 1);
+let elementsAbove = 0;
+let elementsBelow = 0;
+for (i = 0; i < matrix28.length; i++) {
+  for (j = i + 1; j < matrix28[i].length; j++) {
+    elementsAbove += matrix28[i][j];
+  }
+}
+
+for (i = matrix28.length - 1; i >= 0; i--) {
+  for (j = i - 1; j >= 0; j--) {
+    elementsBelow += matrix28[i][j];
+  }
+}
+
+console.log(`
+Soma dos elementos acima da diagonal principal = ${elementsAbove}
+Soma dos elementos abaixo da diagonal principal = ${elementsBelow}
+`);
+
 /* 
 > Funções auxíliares reutilizaveis 
 */
