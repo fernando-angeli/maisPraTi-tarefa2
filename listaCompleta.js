@@ -682,6 +682,25 @@ for (i = 0; i < matrixA.length; i++) {
 console.log(`O produto da matrizA e matrizB é`);
 printMatrix(productAB);
 
+/* 27. Elaborar um algoritmo que leia uma matriz M(6,6) e um valor A. Após a leitura,
+multiplicar a matriz M pelo valor A e colocar os valores da matriz multiplicados por A em
+um vetor V(36). Escrever o vetor V no final.
+ */
+exercise();
+let matrix27 = matrix(6, 6, 1, 3);
+let multiplier = parseInt(prompt("Informe o multiplicador da matriz: "));
+let matrixResult = [];
+
+for (i = 0; i < matrix27.length; i++) {
+  let line = [];
+  for (j = 0; j < matrix27[i].length; j++) {
+    line.push(matrix27[i][j] * multiplier);
+  }
+  matrixResult.push(line);
+}
+console.log("Matriz resultado da multiplicação: ");
+printMatrix(matrixResult);
+
 /* 
 > Funções auxíliares reutilizaveis 
 */
