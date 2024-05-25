@@ -778,6 +778,29 @@ console.log(`Resultado:
 -> Soma diagonal principal = ${sumDiagonal}
 -> Soma de todos os elementos = ${sumOfAll}`);
 
+/* 30. Escrever um algoritmo que lê uma matriz M(5,5) e cria 2 vetores SL(5) e SC(5) que
+contenham, respectivamente, as somas das linhas e das colunas de M. Escrever a matriz
+e os vetores criados.
+*/
+exercise();
+let matrixM30 = matrix(5, 5, 1, 5);
+let sL = [];
+let sC = [];
+matrixM30.forEach((row, i) => {
+  sL.push(0);
+  sC.push(0);
+});
+
+matrixM30.forEach((row, i) => {
+  row.map((element, j) => {
+    sL[i] += element;
+    sC[j] += element;
+  });
+});
+console.log(`-> Soma dos elementos de cada linha: [${sL}]
+-> Soma dos elementos de cada coluna: [${sC}]
+`);
+
 /* 
 > Funções auxíliares reutilizaveis 
 */
