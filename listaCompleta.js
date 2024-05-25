@@ -854,6 +854,9 @@ matrixM32.forEach((row) => {
   });
   matrixM32Modificated.push(line);
 });
+console.log(
+  "Matriz resultado da divisão de cada elemento pelo maior elemento de cada linha:"
+);
 printMatrixWithDecimalNumber(matrixM32Modificated);
 
 /* 
