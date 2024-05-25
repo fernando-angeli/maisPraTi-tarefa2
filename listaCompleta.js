@@ -801,6 +801,40 @@ console.log(`-> Soma dos elementos de cada linha: [${sL}]
 -> Soma dos elementos de cada coluna: [${sC}]
 `);
 
+/* 31. Escreva um algoritmo que leia um número inteiro A e uma matriz V 30 x 30 de inteiros.
+Conte quantos valores iguais a A estão na matriz. Crie, a seguir, uma matriz X contendo
+todos os elementos de V diferentes de A. Mostre os resultados.
+*/
+exercise();
+let a = parseInt(prompt("Informe um valor inteiro: "));
+let matrixV = matrix(5, 5, 1, 9);
+let matrixX = [];
+let countEqualElements = 0;
+let diferentElements = [];
+
+matrixV.forEach((row) => {
+  row.map((element) => {
+    if (element === a) countEqualElements++;
+    else diferentElements.push(element);
+  });
+});
+
+diferentElements.reverse();
+let sizeX = Math.ceil(Math.sqrt(diferentElements.length));
+
+for (i = 0; i < sizeX; i++) {
+  let line = [];
+  for (j = 0; j < sizeX; j++) {
+    let element = diferentElements.pop();
+    if (element !== undefined) line.push(element);
+  }
+  matrixX.push(line);
+}
+console.log(`
+O valor ${a} aparece ${countEqualElements} vez(es) na matriz gerada.
+Matriz resultado da exclusão do elemento ${a} de todas as posições:`);
+printMatrix(matrixX);
+
 /* 
 > Funções auxíliares reutilizaveis 
 */
