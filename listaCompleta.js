@@ -668,20 +668,29 @@ console.log(`A soma dos elementos de cada linha:
 P[1..3,1..5].
  */
 exercise();
-let matrixA = matrix(3, 5, 1, 3);
-let matrixB = matrix(3, 5, 1, 3);
+let matrixA = matrix(3, 5, 1, 4);
+let matrixB = matrix(5, 3, 1, 4);
 let productAB = [];
 
-for (i = 0; i < matrixA.length; i++) {
-  let line = [];
-  for (j = 0; j < matrixA[i].length; j++) {
-    line[j] = matrixA[i][j] * matrixB[i][j];
+if (matrixA.length === matrixB[0].length) {
+  for (i = 0; i < matrixA.length; i++) {
+    let line = [];
+    for (j = 0; j < matrixB[i].length; j++) {
+      let sum = 0;
+      for (k = 0; k < matrixB.length; k++) {
+        sum += matrixA[i][k] * matrixB[k][j];
+      }
+      line.push(sum);
+    }
+    productAB.push(line);
   }
-  productAB[i] = line;
+  console.log("Matriz produto:");
+  printMatrix(productAB);
+} else {
+  console.log(
+    `Não é possível multiplicar matrizes em que a quantidade de linhas da matriz A não seja igual a quantidade de colunas da matriz B.`
+  );
 }
-
-console.log(`O produto da matrizA e matrizB é`);
-printMatrix(productAB);
 
 /* 27. Elaborar um algoritmo que leia uma matriz M(6,6) e um valor A. Após a leitura,
 multiplicar a matriz M pelo valor A e colocar os valores da matriz multiplicados por A em
