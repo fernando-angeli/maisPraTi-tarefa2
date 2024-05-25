@@ -835,6 +835,27 @@ O valor ${a} aparece ${countEqualElements} vez(es) na matriz gerada.
 Matriz resultado da exclusão do elemento ${a} de todas as posições:`);
 printMatrix(matrixX);
 
+/* 32. Escrever um algoritmo que lê uma matriz M(12,13) e divida todos os 13 elementos de
+cada uma das 12 linhas de M pelo maior elemento em módulo daquela linha. Escrever a
+matriz lida e a modificada.
+*/
+exercise();
+let matrixM32 = matrix(12, 13, 1, 9);
+let matrixM32Modificated = [];
+
+matrixM32.forEach((row) => {
+  let higherNumber = 0;
+  let line = [];
+  row.map((element) => {
+    if (element > higherNumber) higherNumber = element;
+  });
+  row.map((element) => {
+    line.push(element / higherNumber);
+  });
+  matrixM32Modificated.push(line);
+});
+printMatrixWithDecimalNumber(matrixM32Modificated);
+
 /* 
 > Funções auxíliares reutilizaveis 
 */
@@ -887,6 +908,21 @@ function printMatrix(matrix) {
     let line = "";
     for (j = 0; j < matrix[i].length; j++) {
       line += matrix[i][j] >= 0 ? ` ${matrix[i][j]}` : matrix[i][j];
+      if (j < matrix[i].length - 1) line += " |";
+    }
+    console.log(line);
+  }
+}
+
+//Printar matrix (com número decimal) - chamando no método de geração
+function printMatrixWithDecimalNumber(matrix) {
+  for (i = 0; i < matrix.length; i++) {
+    let line = "";
+    for (j = 0; j < matrix[i].length; j++) {
+      line +=
+        matrix[i][j] >= 0
+          ? ` ${matrix[i][j].toFixed(1)}`
+          : matrix[i][j].toFixed(1);
       if (j < matrix[i].length - 1) line += " |";
     }
     console.log(line);
