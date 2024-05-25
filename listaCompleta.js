@@ -749,6 +749,35 @@ function displayColorMatrix(matrix) {
   });
 }
 
+/* 29. Escreva um algoritmo que leia uma matriz M(5,5) e calcule as somas:
+a) da linha 4 de M;
+b) da coluna 2 de M;
+c) da diagonal principal;
+d) todos os elementos da matriz M.
+Escrever essas somas e a matriz.
+*/
+exercise();
+let matrixM = matrix(5, 5, 1, 5);
+let sumLine4 = 0;
+let sumColumn2 = 0;
+let sumDiagonal = 0;
+let sumOfAll = 0;
+
+matrixM.forEach((row, i) => {
+  row.map((element, j) => {
+    if (i === j) sumDiagonal += element;
+    if (i === 3) sumLine4 += element;
+    if (j === 1) sumColumn2 += element;
+    sumOfAll += element;
+  });
+});
+
+console.log(`Resultado:
+-> Soma linha 4 = ${sumLine4}
+-> Soma coluna 2 = ${sumColumn2}
+-> Soma diagonal principal = ${sumDiagonal}
+-> Soma de todos os elementos = ${sumOfAll}`);
+
 /* 
 > Funções auxíliares reutilizaveis 
 */
