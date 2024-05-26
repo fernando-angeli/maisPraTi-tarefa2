@@ -859,6 +859,51 @@ console.log(
 );
 printMatrixWithDecimalNumber(matrixM32Modificated);
 
+/* 33. Faça um algoritmo que leia uma matriz 3 x 3 e após a leitura, multiplique os
+elementos da diagonal principal com a média dos elementos da diagonal secundária.
+*/
+exercise();
+let matrix33 = matrix(3, 3, 1, 3);
+let multiplier33 = averageOfTheSecundaryDiagonal(matrix33);
+console.log(
+  `O multiplicador (média dos elementos da diagonal secundária) é ${multiplier33}`
+);
+displayColorMatrix33(matrixWithMultipliedDiagonal(matrix33));
+
+function averageOfTheSecundaryDiagonal(matrix) {
+  let sumElements = 0,
+    row = 0,
+    col = matrix.length - 1;
+  while (col >= 0) {
+    sumElements += matrix[row][col];
+    row++;
+    col--;
+  }
+  return Math.round(sumElements / matrix.length);
+}
+
+function matrixWithMultipliedDiagonal(matrix) {
+  let newMatrix = [];
+  matrix.forEach((row, i) => {
+    newMatrix[i] = [];
+    row.map((element, j) => {
+      if (i === j) newMatrix[i][j] = element * multiplier33;
+      else newMatrix[i][j] = element;
+    });
+  });
+  return newMatrix;
+}
+
+function displayColorMatrix33(matrix) {
+  matrix.forEach((row, i) => {
+    let coloredRow = row.map((element, j) => {
+      if (i === j) return element.toString().green;
+      else return element.toString();
+    });
+    console.log(` ${coloredRow.join(" | ")}`);
+  });
+}
+
 /* 
 > Funções auxíliares reutilizaveis 
 */
