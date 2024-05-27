@@ -919,22 +919,11 @@ estiver cheio, escrevê-lo. Terminada a leitura, escrever o conteúdo dos dois v
 vetor pode ser preenchido quantas vezes forem necessárias.
 */
 exercise();
-let numbers35 = new Array(30).fill(null);
+let numbers35 = getVector(30, 1, 100);
 let pairNumbers = [];
 let oddNumbers = [];
 let pairMatrix = [];
 let oddMatrix = [];
-
-numbers35.forEach((_, index) => {
-  let number;
-  do {
-    number = getRandomInt(1, 100);
-  } while (numbers35.includes(number));
-  numbers35[index] = number;
-});
-numbers35.sort((a, b) => {
-  return a - b;
-});
 
 console.log(`SELECIONADOS:`, `${numbers35.toString()}`.green);
 
@@ -970,7 +959,51 @@ printColorMatrix(pairMatrix, "blue");
 console.log("Todos os números ímpares:");
 printColorMatrix(oddMatrix, "yellow");
 
+/* 36. Escreva um algoritmo que leia um vetor de 13 elementos inteiros, que é o Gabarito de
+um teste da loteria esportiva. Leia, a seguir, para cada um dos 100 apostadores, o número
+do seu cartão e um vetor de Respostas de 13 posições. Verifique para cada apostador o
+número de acertos, comparando o vetor de Gabarito com o vetor de Respostas. Escreva
+o número do apostador e o número de acertos. Se o apostador tiver 13 acertos, mostrar a
+mensagem "Parabéns, tu foi o GANHADOR".
+*/
+exercise();
+const DRAW_NUMBERS = 100;
+const sportsLotteryNumbers = getVector(13, 1, DRAW_NUMBERS);
+let lotteryBetting = [];
+let winners = 0;
+
+console.log(`Números sorteados: `, `${sportsLotteryNumbers}`.blue);
+
+for (i = 1; i <= 100; i++) {
+  const bet = {
+    key: i,
+    numbers: getVector(13, 1, DRAW_NUMBERS),
+  };
+  lotteryBetting.push(bet);
+}
+
+lotteryBetting.forEach((bet) => {
+  let numberOfHits = 0;
+  bet.numbers.map((number) => {
+    if (sportsLotteryNumbers.includes(number)) numberOfHits++;
+  });
+  if (numberOfHits === 13) {
+    console.log(
+      `Aposta ${bet.key} - ${bet.numbers} - total de ${numberOfHits} acerto(s)`,
+      ` - Parabéns, tu foi o GANHADOR`.green
+    );
+    winners++;
+  } else
+    console.log(
+      `Aposta ${bet.key} - ${bet.numbers} - total de ${numberOfHits} acerto(s).`
+    );
+});
+
+console.log(winners > 0 ? `Houve ${winners} ganhador(es)` : "Nenhum ganhador.");
+
 /* 
+>
+>
 > Funções auxíliares reutilizaveis 
 */
 
@@ -1065,4 +1098,23 @@ function printColorMainDiagonal(matrix, color) {
     });
     console.log(` ${coloredRow.join(" | ")}`);
   });
+}
+
+// Gera um vetor de inteiros com tamanho definido e numeros aleatórios no intervalo definido
+function getVector(size, min, max) {
+  if (size <= max - min + 1) {
+    let vector = new Array(size).fill(null);
+    vector.forEach((_, index) => {
+      let number;
+      do {
+        number = getRandomInt(min, max);
+      } while (vector.includes(number));
+      vector[index] = number;
+    });
+    return vector.sort((a, b) => {
+      return a - b;
+    });
+  } else {
+    return [];
+  }
 }
