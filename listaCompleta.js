@@ -1001,6 +1001,67 @@ lotteryBetting.forEach((bet) => {
 
 console.log(winners > 0 ? `Houve ${winners} ganhador(es)` : "Nenhum ganhador.");
 
+/* 37. Escreva um algoritmo que leia um vetor G de 20 elementos caractere que representa
+o gabarito de uma prova. A seguir, para cada um dos 50 alunos da turma, leia o vetor de
+respostas (R) do aluno e conte o número de acertos. Mostre o número de acertos do
+aluno e uma mensagem “APROVADO” se a quantidade de acertos for maior ou igual a 12;
+e mostre uma mensagem de “REPROVADO”, caso contrário.
+*/
+exercise();
+const QUESTIONS = 20;
+const STUDENTS = 50;
+const CORRECT_ANSWERS_FOR_APPROVAL = 12;
+let g = getVectorCharacters(QUESTIONS);
+let studentsAnswers = generateStudentsResponse(STUDENTS);
+
+correctStudentsTests(g, studentsAnswers);
+
+studentsAnswers.forEach((student) => {
+  console.log(
+    `Aluno ${student.student} - acertos: ${student.correctAnswers} - situação:`,
+    student.approval ? "APROVADO".green : "REPROVADO".red
+  );
+});
+
+function drawAnswers() {
+  const answers = ["a", "b", "c", "d"];
+  const index = getRandomInt(0, 3);
+  return answers[index];
+}
+
+function getVectorCharacters(size) {
+  let vector = new Array(size).fill(null);
+  vector.forEach((_, index) => {
+    vector[index] = drawAnswers();
+  });
+  return vector;
+}
+
+function generateStudentsResponse(numberOfStudents) {
+  let vector = new Array(numberOfStudents).fill(null);
+  vector.forEach((_, index) => {
+    vector[index] = {
+      student: index + 1,
+      answers: getVectorCharacters(QUESTIONS),
+      correctAnswers: 0,
+      approval: false,
+    };
+  });
+  return vector;
+}
+
+function correctStudentsTests(template, tests) {
+  tests.forEach((test, index) => {
+    let corrects = 0;
+    let student = index + 1;
+    test.answers.map((response, index) => {
+      if (response === template[index]) corrects++;
+    });
+    if (corrects >= CORRECT_ANSWERS_FOR_APPROVAL) test.approval = true;
+    test.correctAnswers = corrects;
+  });
+}
+
 /* 
 >
 >
