@@ -1062,6 +1062,124 @@ function correctStudentsTests(template, tests) {
   });
 }
 
+/* 38. Elabore um algoritmo que leia um vetor de 6 posições e após sua leitura leia outra
+variável identificadora que calcule a operação conforme a informação contida nesta
+variável:
+1- soma dos elementos;
+2- produto dos elementos;
+3- média dos elementos;
+4- ordene os elementos em ordem crescente;
+5- mostre o vetor.
+*/
+console.clear();
+exercise();
+continueReading = 1;
+console.log("Informe 6 valores");
+
+let vector38 = new Array(6).fill(null);
+vector38.forEach((_, index) => {
+  vector38[index] = parseInt(prompt(`Informe o valor ${index + 1}: `));
+});
+
+start(vector38, add, product, average, ordered, printVector);
+
+function start(vector, add, product, average, ordered, printVector) {
+  while (continueReading !== 0) {
+    console.clear();
+    menu();
+    option = parseInt(prompt("OPÇÃO: "));
+    console.clear();
+    switch (option) {
+      case 0:
+        continueReading = 0;
+        break;
+      case 1:
+        add(vector);
+        continueReading = subMenu();
+        break;
+      case 2:
+        product(vector);
+        continueReading = subMenu();
+        break;
+      case 3:
+        average(vector);
+        continueReading = subMenu();
+        break;
+      case 4:
+        ordered(vector);
+        continueReading = subMenu();
+        break;
+      case 5:
+        printVector(vector);
+        continueReading = subMenu();
+        break;
+      default:
+        break;
+    }
+  }
+}
+
+function add(vector) {
+  printVector(vector);
+  return console.log(
+    "Soma dos elementos do vetor: ",
+    vector.reduce((accumulator, current) => accumulator + current, 0)
+  );
+}
+
+function product(vector) {
+  printVector(vector);
+  return console.log(
+    "Produto dos elementos do vetor: ",
+    vector.reduce((accumulator, current) => accumulator * current, 1)
+  );
+}
+
+function average(vector) {
+  printVector(vector);
+  return console.log(
+    "Média dos elementos do vetor: ",
+    (
+      vector.reduce((accumulator, current) => accumulator + current, 0) /
+      vector.length
+    ).toFixed(1)
+  );
+}
+
+function ordered(vector) {
+  printVector(vector);
+  let orderedVector = [...vector];
+  return printVector(
+    orderedVector.sort((a, b) => {
+      return a - b;
+    })
+  );
+}
+
+function printVector(vector) {
+  let print = "";
+  vector.forEach((element, index) => {
+    print += element;
+    if (index < vector.length - 1) print += " | ";
+  });
+  console.log(print);
+}
+
+function menu() {
+  console.log(
+    "MENU > ".yellow,
+    "1 - Soma | 2 - Produto | 3 - Média | 4 - Ordenar | 5 - Vetor".blue,
+    " | 0 - SAIR".red
+  );
+}
+
+function subMenu() {
+  console.log("\nMENU > ".yellow, "1 - Voltar".green, " | ", "0 - SAIR: ".red);
+  let option = parseInt(prompt("OPÇÃO: "));
+  console.clear();
+  return option;
+}
+
 /* 
 >
 >
