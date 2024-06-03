@@ -1260,6 +1260,32 @@ for (d in dados) {
 console.log("Dados originais:\n", dados);
 console.log("Propriedades que são arrays:\n", newDados);
 
+/* 43. Dado dois objetos, obj1 e obj2, escreva uma função que crie um novo objeto
+combinando as propriedades de ambos, onde as propriedades de obj2 têm precedência
+sobre as do obj1 em caso de conflitos.
+*/
+exercise();
+const obj1 = {
+  nome: "Paulo",
+  cidade: "NH",
+  estado: "Rio Grande do Sul",
+};
+const obj2 = {
+  endereco: "Rua das Flores",
+  numero: 2525,
+  cidade: "Novo Hamburgo",
+  estado: "RS",
+};
+
+function joinObjects(obj1, obj2) {
+  return { ...obj1, ...obj2 };
+}
+
+const objJoined = joinObjects(obj1, obj2);
+console.log("Obj1:", obj1);
+console.log("Obj2:", obj2);
+console.log("Junção:", objJoined);
+
 /* 
 >
 >
