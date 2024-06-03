@@ -1239,6 +1239,27 @@ console.log("Idade: ", pessoa.idade);
 pessoa.email = "maria@gmail.com";
 console.log(pessoa);
 
+/* 42. Crie um objeto chamado dados que contém várias propriedades, incluindo números,
+strings e arrays. Escreva uma função que retorne um novo objeto apenas com as
+propriedades que são arrays.
+*/
+exercise();
+const dados = {
+  codigo: 1,
+  nome: "Pedro",
+  funcoes: ["Auxiliar", "Telefonista", "Recepcionista"],
+  diasTrabalho: ["Segunda", "Quarta", "Sexta"],
+  cargaHorariaSemanal: 24,
+  remuneracao: 1800.0,
+};
+const newDados = {};
+
+for (d in dados) {
+  if (Array.isArray(dados[d])) newDados[d] = dados[d];
+}
+console.log("Dados originais:\n", dados);
+console.log("Propriedades que são arrays:\n", newDados);
+
 /* 
 >
 >
