@@ -1193,6 +1193,37 @@ vectorA.forEach((element) => {
 console.log(`Vetor A (${vectorA.length} elementos)\n`, vectorA);
 console.log(`Vetor B (${vectorB.length} elementos)\n`, vectorB);
 
+/* 40. Faça um algoritmo que leia um vetor de 5 elementos inteiros, correspondentes ao
+resultado oficial da Loto. A seguir, leia 50 conjuntos de vetores (com 5 elementos inteiros
+cada), representando as apostas feitas. Compare os números das apostas com o
+resultado oficial e mostre uma mensagem ("Ganhador") se todos os números
+corresponderem ao resultado oficial. (Observação: não é necessário procurar por ternos
+e quadras, apenas por quinas.)
+*/
+exercise();
+const NUMBER_OF_BETTORS = 50;
+const lotteryDraw = getVector(5, 1, 61);
+const apostas50 = [];
+
+for (i = 0; i < NUMBER_OF_BETTORS; i++) {
+  apostas50[i] = getVector(5, 1, 61);
+}
+
+console.log("Números sorteados:", lotteryDraw);
+apostas50.forEach((aposta) => {
+  let hits = 0;
+  for (i = 0; i < aposta.length; i++) {
+    if (lotteryDraw.includes(aposta[i])) {
+      hits++;
+    }
+  }
+  let winner = hits === 5 ? true : false;
+  console.log(
+    aposta,
+    winner ? `- Ganhador (5 acertos)`.green : `${hits} acerto(s)`.red
+  );
+});
+
 /* 
 >
 >
