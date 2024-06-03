@@ -1180,6 +1180,19 @@ function subMenu() {
   return option;
 }
 
+/* 39. Faça um algoritmo que leia um vetor (A) de 100 posições. Em seguida, compacte o
+vetor, retirando os valores nulos e negativos. Coloque o resultado no vetor B
+*/
+exercise();
+let vectorA = getVectorWithRepetition(100, -10, 10);
+let vectorB = [];
+vectorA.forEach((element) => {
+  if (element > 0) vectorB.push(element);
+});
+
+console.log(`Vetor A (${vectorA.length} elementos)\n`, vectorA);
+console.log(`Vetor B (${vectorB.length} elementos)\n`, vectorB);
+
 /* 
 >
 >
@@ -1296,4 +1309,13 @@ function getVector(size, min, max) {
   } else {
     return [];
   }
+}
+
+// Gera um vetor de inteiros com tamanho definido e numeros aleatórios no intervalo definido com repetição
+function getVectorWithRepetition(size, min, max) {
+  let vector = new Array(size).fill(null);
+  vector.forEach((_, index) => {
+    vector[index] = getRandomInt(min, max);
+  });
+  return vector;
 }
