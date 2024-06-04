@@ -1350,6 +1350,34 @@ function countFruits(obj) {
 console.log(fruits);
 console.log("Contagem de frutas no objeto:", countFruits(fruits));
 
+/* 46. Suponha que você tem um array de objetos onde cada objeto representa uma venda
+com vendedor e valor. Escreva uma função que retorne um objeto que sumarize o total
+de vendas por vendedor.
+*/
+exercise();
+let sales = [
+  { seller: "Pedro", value: 1500.0 },
+  { seller: "Bruno", value: 1000.0 },
+  { seller: "Andre", value: 2000.0 },
+  { seller: "Bruno", value: 800.0 },
+  { seller: "Pedro", value: 100.0 },
+  { seller: "Bruno", value: 500.0 },
+  { seller: "Andre", value: 800.0 },
+];
+
+function processSales(sales) {
+  const salesSummary = {};
+  sales.forEach((sale) => {
+    sale.seller in salesSummary
+      ? (salesSummary[sale.seller] += sale.value)
+      : (salesSummary[sale.seller] = sale.value);
+  });
+  return salesSummary;
+}
+
+console.log("Vendas", sales);
+console.log("Total por vendedor:", processSales(sales));
+
 /* 
 >
 >
