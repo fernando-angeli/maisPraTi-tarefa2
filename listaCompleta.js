@@ -1378,6 +1378,50 @@ function processSales(sales) {
 console.log("Vendas", sales);
 console.log("Total por vendedor:", processSales(sales));
 
+/* 47. Crie uma função que transforme um objeto de entrada aplicando uma função
+fornecida a cada uma das propriedades do objeto, retornando um novo objeto com os
+resultados.
+*/
+exercise();
+const students = [
+  {
+    nome: "Pedro",
+    nota: 5.9,
+    status: "",
+  },
+  {
+    nome: "Ana",
+    nota: 7,
+    status: "",
+  },
+  {
+    nome: "Maria",
+    nota: 5.5,
+    status: "",
+  },
+  {
+    nome: "Jonas",
+    nota: 3.5,
+    status: "",
+  },
+];
+
+function isApproved(note) {
+  if (note < 5) return "Reprovado";
+  else if (note < 6) return "Em recuperação";
+  else return "Aprovado";
+}
+
+function updateStudentsStatus(students, isApproved) {
+  students.forEach((student) => {
+    student.status = isApproved(student.nota);
+  });
+}
+
+console.log("Lista estudantes original:", students);
+updateStudentsStatus(students, isApproved);
+console.log("Resultado após processameneto:", students);
+
 /* 
 >
 >
