@@ -1286,6 +1286,39 @@ console.log("Obj1:", obj1);
 console.log("Obj2:", obj2);
 console.log("Junção:", objJoined);
 
+/* 44. Escreva uma função que conte quantas propriedades do tipo string existem em um
+objeto e retorne esse número.
+*/
+exercise();
+const address = {
+  cep: "01001-000",
+  logradouro: "Praça da Sé",
+  numero: 1850,
+  complemento: "lado ímpar",
+  bairro: "Sé",
+  localidade: "São Paulo",
+  uf: "SP",
+  ibge: 3550308,
+  gia: 1004,
+  ddd: 11,
+  siafi: 7107,
+};
+
+function countString(obj) {
+  let countString = 0;
+  for (o in obj) {
+    if (typeof obj[o] === "string") countString++;
+  }
+  return countString;
+}
+
+console.log(address);
+console.log(
+  "O objeto contém",
+  countString(address),
+  "propriedade(s) do tipo String."
+);
+
 /* 
 >
 >
