@@ -1319,6 +1319,37 @@ console.log(
   "propriedade(s) do tipo String."
 );
 
+/* 45. Dado um array de strings, crie um objeto onde cada string é uma chave, e seu valor é
+o número de vezes que a string aparece no array.
+*/
+exercise();
+const fruits = [
+  "pera",
+  "uva",
+  "banana",
+  "pera",
+  "melancia",
+  "banana",
+  "banana",
+  "pera",
+  "banana",
+];
+
+function countFruits(obj) {
+  let countFruits = {};
+  fruits.forEach((fruit) => {
+    if (fruit in countFruits) {
+      countFruits[fruit] += 1;
+    } else {
+      countFruits[fruit] = 1;
+    }
+  });
+  return countFruits;
+}
+
+console.log(fruits);
+console.log("Contagem de frutas no objeto:", countFruits(fruits));
+
 /* 
 >
 >
