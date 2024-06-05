@@ -1291,8 +1291,9 @@ objeto e retorne esse número.
 */
 exercise();
 const address = {
-  cep: "01001000",
+  cep: "01001-000",
   logradouro: "Praça da Sé",
+  numero: 1850,
   complemento: "lado ímpar",
   bairro: "Sé",
   localidade: "São Paulo",
@@ -1302,13 +1303,124 @@ const address = {
   ddd: 11,
   siafi: 7107,
 };
-let stringProperties = 0;
 
-for (p in address) {
-  if (typeof address[p] === "string") stringProperties++;
+function countString(obj) {
+  let countString = 0;
+  for (o in obj) {
+    if (typeof obj[o] === "string") countString++;
+  }
+  return countString;
 }
+
 console.log(address);
-console.log("Propriedades que são do tipo 'string':", stringProperties);
+console.log(
+  "O objeto contém",
+  countString(address),
+  "propriedade(s) do tipo String."
+);
+
+/* 45. Dado um array de strings, crie um objeto onde cada string é uma chave, e seu valor é
+o número de vezes que a string aparece no array.
+*/
+exercise();
+const fruits = [
+  "pera",
+  "uva",
+  "banana",
+  "pera",
+  "melancia",
+  "banana",
+  "banana",
+  "pera",
+  "banana",
+];
+
+function countFruits(obj) {
+  let countFruits = {};
+  fruits.forEach((fruit) => {
+    if (fruit in countFruits) {
+      countFruits[fruit] += 1;
+    } else {
+      countFruits[fruit] = 1;
+    }
+  });
+  return countFruits;
+}
+
+console.log(fruits);
+console.log("Contagem de frutas no objeto:", countFruits(fruits));
+
+/* 46. Suponha que você tem um array de objetos onde cada objeto representa uma venda
+com vendedor e valor. Escreva uma função que retorne um objeto que sumarize o total
+de vendas por vendedor.
+*/
+exercise();
+let sales = [
+  { seller: "Pedro", value: 1500.0 },
+  { seller: "Bruno", value: 1000.0 },
+  { seller: "Andre", value: 2000.0 },
+  { seller: "Bruno", value: 800.0 },
+  { seller: "Pedro", value: 100.0 },
+  { seller: "Bruno", value: 500.0 },
+  { seller: "Andre", value: 800.0 },
+];
+
+function processSales(sales) {
+  const salesSummary = {};
+  sales.forEach((sale) => {
+    sale.seller in salesSummary
+      ? (salesSummary[sale.seller] += sale.value)
+      : (salesSummary[sale.seller] = sale.value);
+  });
+  return salesSummary;
+}
+
+console.log("Vendas", sales);
+console.log("Total por vendedor:", processSales(sales));
+
+/* 47. Crie uma função que transforme um objeto de entrada aplicando uma função
+fornecida a cada uma das propriedades do objeto, retornando um novo objeto com os
+resultados.
+*/
+exercise();
+const students = [
+  {
+    nome: "Pedro",
+    nota: 5.9,
+    status: "",
+  },
+  {
+    nome: "Ana",
+    nota: 7,
+    status: "",
+  },
+  {
+    nome: "Maria",
+    nota: 5.5,
+    status: "",
+  },
+  {
+    nome: "Jonas",
+    nota: 3.5,
+    status: "",
+  },
+];
+
+function isApproved(note) {
+  if (note < 5) return "Reprovado";
+  else if (note < 6) return "Em recuperação";
+  else return "Aprovado";
+}
+
+function updateStudentsStatus(students, isApproved) {
+  students.forEach((student) => {
+    student.status = isApproved(student.nota);
+  });
+}
+
+console.log("Lista estudantes original:", students);
+updateStudentsStatus(students, isApproved);
+console.log("Resultado após processameneto:", students);
 
 /* 
 >
