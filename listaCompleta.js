@@ -1550,9 +1550,9 @@ function expenseSummary(financialTransactions) {
 const resumeFinancialTranscations = expenseSummary(financialTransactions);
 
 Object.keys(resumeFinancialTranscations).forEach((category) => {
-  console.log("\nDespesa:", category);
+  console.log("\n > Despesa:", category);
   resumeFinancialTranscations[category].transactions.forEach((s) => {
-    console.log(`R$${s.toFixed(2)}`);
+    console.log(`R$ ${s.toFixed(2)}`);
   });
   console.log(
     "Subtotal: R$",
