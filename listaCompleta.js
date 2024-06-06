@@ -1464,6 +1464,102 @@ console.log(
   addStock(inventarioLojaA, inventarioLojaB)
 );
 
+/* 49. Você recebe um array de objetos representando transações financeiras. Cada
+transação possui id, valor, data, e categoria. Escreva uma função que retorne um objeto
+onde as chaves são as categorias, e os valores são arrays de transações pertencentes a
+essa categoria. Adicionalmente, inclua um subtotal de valores por categoria.
+*/
+exercise();
+const financialTransactions = [
+  {
+    id: 1,
+    value: 150.75,
+    date: "2024-01-15",
+    category: "Alimentacao",
+  },
+  {
+    id: 2,
+    value: 300.0,
+    date: "2024-01-20",
+    category: "Transporte",
+  },
+  {
+    id: 3,
+    value: 450.3,
+    date: "2024-02-05",
+    category: "Alimentacao",
+  },
+  {
+    id: 4,
+    value: 100.0,
+    date: "2024-02-10",
+    category: "Lazer",
+  },
+  {
+    id: 5,
+    value: 1200.5,
+    date: "2024-02-15",
+    category: "Transporte",
+  },
+  {
+    id: 6,
+    value: 50.25,
+    date: "2024-03-01",
+    category: "Lazer",
+  },
+  {
+    id: 7,
+    value: 220.4,
+    date: "2024-03-10",
+    category: "Transporte",
+  },
+  {
+    id: 8,
+    value: 90.0,
+    date: "2024-03-20",
+    category: "Alimentacao",
+  },
+  {
+    id: 9,
+    value: 500.0,
+    date: "2024-03-25",
+    category: "Lazer",
+  },
+  {
+    id: 10,
+    value: 60.75,
+    date: "2024-03-30",
+    category: "Transporte",
+  },
+];
+
+function expenseSummary(financialTransactions) {
+  console.log(financialTransactions);
+  const summary = {};
+  financialTransactions.forEach((t) => {
+    const { category, value } = t;
+    if (!summary[category]) {
+      summary[category] = { transactions: [], subTotal: 0 };
+    }
+    summary[category].transactions.push(value);
+    summary[category].subTotal += value;
+  });
+  return summary;
+}
+
+const resumeFinancialTranscations = expenseSummary(financialTransactions);
+
+Object.keys(resumeFinancialTranscations).forEach((category) => {
+  console.log("\nDespesa:", category);
+  resumeFinancialTranscations[category].transactions.forEach((s) => {
+    console.log(`R$${s.toFixed(2)}`);
+  });
+  console.log(
+    "Subtotal: R$",
+    resumeFinancialTranscations[category].subTotal.toFixed(2)
+  );
+});
+
 /* 
 >
 >
