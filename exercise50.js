@@ -36,29 +36,34 @@ console.log(`\n --- EXERCICIO 50 ---`);
 /* SIMULAÇÃO DE BANCO DE DADOS */
 class Database {
   constructor() {
-    this.database = { hotels: {}, reservations: {} };
+    this.database = { hotels: {}, reservations: {}, cities: {} };
   }
 
   generateIdHotel() {
-    const keys = Object.keys(this.database["hotels"]);
-    if (keys.length === 0) return 1;
-    return parseInt(keys.length + 1);
+    if (Object.keys(this.database["hotels"]).length === 0) return 1;
+    return parseInt(Object.keys(this.database["hotels"]).length + 1);
   }
 
   generateIdHotelReservation() {
-    const keys = Object.keys(this.database["reservations"]);
-    if (keys.length === 0) return 1;
-    return parseInt(keys.length + 1);
+    if (Object.keys(this.database["reservations"]).length === 0) return 1;
+    return parseInt(Object.keys(this.database["reservations"]).length + 1);
+  }
+
+  generateIdCity() {
+    if (Object.keys(this.database["cities"]).length === 0) return 1;
+    return parseInt(Object.keys(this.database["cities"]).length + 1);
   }
 
   insert(object) {
-    let id = "";
     if (object instanceof Hotel) {
-      id = this.generateIdHotel();
-      this.database["hotels"][id] = object;
+      object.id = this.generateIdHotel();
+      this.database["hotels"][object.id] = object;
     } else if (object instanceof HotelReservation) {
-      id = this.generateIdHotelReservation();
-      this.database["reservations"][id] = object;
+      object.id = this.generateIdHotelReservation();
+      this.database["reservations"][object.id] = object;
+    } else if (object instanceof City) {
+      object.id = this.generateIdCity();
+      this.database["cities"][object.id] = object;
     }
   }
 
@@ -83,7 +88,16 @@ class Database {
   }
 
   verifyTypeEntity(type) {
-    return type === "hotels" ? "hotel" : "reserva";
+    switch (type) {
+      case "hotels":
+        return "hotel";
+      case "reservations":
+        return "reserva";
+      case "cities":
+        return "cidade";
+      default:
+        return "Não identifcado";
+    }
   }
 
   // deleteTask(id) {
@@ -117,6 +131,7 @@ class Database {
   //   return filterTask;
   // }
 }
+const database = new Database();
 
 function messageError(erro) {
   return console.log(`ERRO: ${erro}`.red);
@@ -126,13 +141,51 @@ function isEmpty(obj) {
   return obj === undefined || obj === null || Object.keys(obj).length === 0;
 }
 
-const database = new Database();
+/* Entity City (Cidades) */
+class City {
+  constructor(id, name) {
+    this.id = id;
+    this.city = name;
+  }
+}
+
+class CityService {
+  constructor(database) {
+    this.database = database;
+  }
+
+  createCity(name) {
+    let id = database.generateIdCity();
+    let newCity = new City(id, name);
+    database.insert(newCity);
+    return newCity;
+  }
+
+  findAll() {
+    try {
+      return database.findAll("cities");
+    } catch (error) {
+      messageError(error.message);
+      return {};
+    }
+  }
+
+  findById(id) {
+    try {
+      return database.findById("cities", id);
+    } catch (error) {
+      messageError(error.message);
+      return {};
+    }
+  }
+}
+const cityService = new CityService();
 
 class Hotel {
-  constructor(name, city, numberOfRooms) {
-    this.id = database.generateIdHotel();
+  constructor(id, name, cityId, numberOfRooms) {
+    this.id = id;
     this.name = name;
-    this.city = city;
+    this.city = cityId;
     this.numberOfRooms = numberOfRooms;
     this.availableRooms = this.numberOfRooms;
     this.reservedRooms = 0;
@@ -140,10 +193,18 @@ class Hotel {
 }
 
 class HotelService {
-  constructor() {}
+  constructor(cityService, database) {
+    this.cityService = cityService;
+    this.database = database;
+  }
 
-  createHotel(name, city, numberOfRooms) {
-    let newHotel = new Hotel(name, city, numberOfRooms);
+  createHotel(name, cityId, numberOfRooms) {
+    const id = database.generateIdHotel();
+    const city = cityService.findById(cityId);
+    if (city == {}) {
+      throw new Error(`A cidade de id ${cityId} não foi localizada.`);
+    }
+    let newHotel = new Hotel(id, name, cityId, numberOfRooms);
     database.insert(newHotel);
     return newHotel;
   }
@@ -180,23 +241,23 @@ class HotelService {
   //   return false;
   // }
 }
-
-// Instanciação da Classe HotelService
 const hotelService = new HotelService();
 
 // REFATORAR CODIGOS PARA CLASSES DE SERVIÇOS PARA CRIAR HOTEIS E RESERVAS, DEIXAR SOMENTE O QUE SERIA REFERENTE A CLASSE COMO MÉTODOS GET DE ALGUM ATRIBUTO
 class HotelReservation {
-  constructor(idHotel, nameClient) {
-    this.idResevation = database.generateIdHotelReservation();
+  constructor(id, idHotel, nameClient) {
+    this.id = id;
     this.idHotel = idHotel;
     this.nameClient = nameClient;
   }
 }
 
 class HotelReservationService {
-  constructor() {}
+  constructor(database, hotelService) {}
+
   createReservation(idHotel, nameClient) {
-    let newReservation = new HotelReservation(idHotel, nameClient);
+    const hotel = hotelService.findById(idHotel);
+    let newReservation = new HotelReservation(hotel, nameClient);
     database.insert(newReservation);
     return newReservation;
   }
@@ -222,15 +283,39 @@ class HotelReservationService {
 const hotelReservationService = new HotelReservationService();
 
 /*USO*/
+// TESTES PARA CITY
+cityService.createCity("Rio de Janeiro");
+cityService.createCity("Porto Alegre");
+cityService.createCity("São Paulo");
+// console.log(cityService.findAll());
+// console.log(cityService.findById(1));
+// console.log(cityService.findById(4));
 
-hotelService.createHotel("Copa Cabana", "Rio de Janeiro", 200);
-hotelService.createHotel("Ibis RS", "Porto Alegre", 160);
-hotelService.createHotel("Ibis SP", "São Paulo", 160);
-hotelReservationService.createReservation(1, "Pedro");
-console.log(hotelReservationService.findAll());
-console.log(hotelService.findById(1));
-console.log(hotelService.findById(4));
-console.log(hotelReservationService.findById(2));
+// TESTES PARA HOTEL
+function createHotel(name, idCity, numberOfRooms) {
+  try {
+    const newHotel = hotelService.createHotel(name, idCity, numberOfRooms);
+    console.log("Hotel criado com sucesso!", newHotel);
+  } catch (error) {
+    messageError(error.message);
+  }
+}
+
+console.log(cityService.findAll());
+
+createHotel("Copa Cabana Palace", 1, 200);
+createHotel("Ibis ERRADO", 4, 160);
+createHotel("Ibis", 2, 160);
+console.log(hotelService.findById(2));
+console.log(hotelService.findAll());
+
+// TESTES PARA RESERVAS
+// hotelReservationService.createReservation(1, "Pedro");
+// console.log(hotelReservationService.findAll());
+// console.log(hotelReservationService.findAll());
+// console.log(hotelService.findById(1));
+// console.log(hotelService.findById(4));
+// console.log(hotelReservationService.findById(2));
 
 /*
 IMPLEMENTAÇÕES
