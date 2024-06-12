@@ -38,56 +38,52 @@ class Database {
   constructor() {
     this.database = { hotels: {}, reservations: {}, cities: {} };
   }
-
   generateIdHotel() {
     if (Object.keys(this.database["hotels"]).length === 0) return 1;
     return parseInt(Object.keys(this.database["hotels"]).length + 1);
   }
-
   generateIdHotelReservation() {
     if (Object.keys(this.database["reservations"]).length === 0) return 1;
     return parseInt(Object.keys(this.database["reservations"]).length + 1);
   }
-
   generateIdCity() {
     if (Object.keys(this.database["cities"]).length === 0) return 1;
     return parseInt(Object.keys(this.database["cities"]).length + 1);
   }
-
-  insert(object) {
-    if (object instanceof Hotel) {
-      object.id = this.generateIdHotel();
-      this.database["hotels"][object.id] = object;
-    } else if (object instanceof HotelReservation) {
-      object.id = this.generateIdHotelReservation();
-      this.database["reservations"][object.id] = object;
-    } else if (object instanceof City) {
-      object.id = this.generateIdCity();
-      this.database["cities"][object.id] = object;
+  insertOrUpdate(object) {
+    switch (true) {
+      case object instanceof Hotel:
+        this.database.hotels[object.id] = object;
+        break;
+      case object instanceof City:
+        this.database.cities[object.id] = object;
+        break;
+      case object instanceof HotelReservation:
+        this.database.reservations[object.id] = object;
+        break;
+      default:
+        throw new Error("Entidade não encontrada.");
     }
   }
-
   findAll(type) {
     const data = this.database[type];
     if (isEmpty(data)) {
       throw new Error(
-        `Sem cadastrado de ${this.verifyTypeEntity(type)} até o momento.`
+        `Sem cadastrado de ${this.getDescription(type)} até o momento.`
       );
     }
     return data;
   }
-
   findById(type, id) {
     const data = this.database[type][id];
     if (isEmpty(data)) {
       throw new Error(
-        `Id ${id} para ${this.verifyTypeEntity(type)} não localizado.`
+        `Id ${id} para ${this.getDescription(type)} não localizado.`
       );
     }
     return data;
   }
-
-  verifyTypeEntity(type) {
+  getDescription(type) {
     switch (type) {
       case "hotels":
         return "hotel";
@@ -99,37 +95,6 @@ class Database {
         return "Não identifcado";
     }
   }
-
-  // deleteTask(id) {
-
-  // }
-
-  // loadTasks() {
-  //   const tasks = Array();
-  //   const id = localStorage.getItem("id");
-  //   for (let i = 1; i <= id; i++) {
-  //     const task = JSON.parse(localStorage.getItem(i));
-  //     if (task === null) continue;
-  //     task.id = i;
-  //     tasks.push(task);
-  //   }
-  //   return tasks;
-  // }
-
-  // searchTasks(task) {
-  //   let filterTask = Array();
-  //   filterTask = this.loadTasks();
-
-  //   if (task.date !== "")
-  //     filterTask = filterTask.filter((t) => t.date === task.date);
-  //   if (task.title !== "")
-  //     filterTask = filterTask.filter((t) => regex(task.title).test(t.title));
-  //   if (task.description !== "")
-  //     filterTask = filterTask.filter((t) =>
-  //       regex(task.description).test(t.description)
-  //     );
-  //   return filterTask;
-  // }
 }
 const database = new Database();
 
@@ -153,14 +118,20 @@ class CityService {
   constructor(database) {
     this.database = database;
   }
-
   createCity(name) {
-    let id = database.generateIdCity();
-    let newCity = new City(id, name);
-    database.insert(newCity);
-    return newCity;
+    try {
+      if (!isEmpty(name)) {
+        const id = database.generateIdCity();
+        const newCity = new City(id, name);
+        database.insertOrUpdate(newCity);
+        console.log("Cidade criada com sucesso:", newCity);
+        return;
+      }
+      throw new Error("Obrigatório informar o nome da cidade.");
+    } catch (error) {
+      messageError(error.message);
+    }
   }
-
   findAll() {
     try {
       return database.findAll("cities");
@@ -169,7 +140,6 @@ class CityService {
       return {};
     }
   }
-
   findById(id) {
     try {
       return database.findById("cities", id);
@@ -181,6 +151,7 @@ class CityService {
 }
 const cityService = new CityService();
 
+/* Entity Hotel (Hoteis) */
 class Hotel {
   constructor(id, name, cityId, numberOfRooms) {
     this.id = id;
@@ -197,53 +168,51 @@ class HotelService {
     this.cityService = cityService;
     this.database = database;
   }
-
-  createHotel(name, cityId, numberOfRooms) {
-    const id = database.generateIdHotel();
-    const city = cityService.findById(cityId);
-    if (city == {}) {
-      throw new Error(`A cidade de id ${cityId} não foi localizada.`);
+  createHotel(name, idCity, numberOfRooms) {
+    try {
+      const city = cityService.findById(idCity);
+      if (!isEmpty(city)) {
+        const id = database.generateIdHotel();
+        const newHotel = new Hotel(id, name, idCity, numberOfRooms);
+        database.insertOrUpdate(newHotel);
+        console.log("Hotel criado com sucesso:", newHotel);
+      }
+    } catch (error) {
+      messageError(error.message);
     }
-    let newHotel = new Hotel(id, name, cityId, numberOfRooms);
-    database.insert(newHotel);
-    return newHotel;
   }
-
+  updateHotel(hotel) {
+    hotel.availableRooms--;
+    hotel.reservedRooms++;
+    database.insertOrUpdate(hotel);
+    return hotel;
+  }
   findAll() {
     try {
       return database.findAll("hotels");
     } catch (error) {
       messageError(error.message);
-      return {};
     }
   }
-
   findById(id) {
     try {
       return database.findById("hotels", id);
     } catch (error) {
       messageError(error.message);
-      return {};
     }
   }
-
-  // getAvailableRooms(id) {
-  //   if (this.availableRooms > 0) return this.availableRooms;
-  //   return null;
-  // }
-
-  // bookRoom(rooms) {
-  //   if (this.availableRooms >= rooms) {
-  //     this.reservedRooms += rooms;
-  //     this.availableRooms -= rooms;
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  getAvailableRooms(id) {
+    const hotel = this.findById(id);
+    try {
+      return hotel.getAvailableRooms;
+    } catch (error) {
+      messageError(error.message);
+    }
+  }
 }
 const hotelService = new HotelService();
 
-// REFATORAR CODIGOS PARA CLASSES DE SERVIÇOS PARA CRIAR HOTEIS E RESERVAS, DEIXAR SOMENTE O QUE SERIA REFERENTE A CLASSE COMO MÉTODOS GET DE ALGUM ATRIBUTO
+/* Entity HotelResevation (Reservas de hoteis) */
 class HotelReservation {
   constructor(id, idHotel, nameClient) {
     this.id = id;
@@ -253,15 +222,29 @@ class HotelReservation {
 }
 
 class HotelReservationService {
-  constructor(database, hotelService) {}
-
-  createReservation(idHotel, nameClient) {
-    const hotel = hotelService.findById(idHotel);
-    let newReservation = new HotelReservation(hotel, nameClient);
-    database.insert(newReservation);
-    return newReservation;
+  constructor(database, hotelService) {
+    this.database = database;
+    this.hotelService = hotelService;
   }
-
+  createReservation(idHotel, nameClient) {
+    try {
+      const hotel = hotelService.findById(idHotel);
+      if (!isEmpty(hotel) && hotel.availableRooms > 0) {
+        const id = database.generateIdHotelReservation();
+        hotelService.updateHotel(hotel);
+        let newReservation = new HotelReservation(id, idHotel, nameClient);
+        database.insertOrUpdate(newReservation);
+        console.log("Reserva criada com sucesso:", newReservation);
+        return;
+      } else if (!isEmpty(hotel) && hotel.availableRooms === 0) {
+        throw new Error(
+          `Lamentamos mas o hotel selecionado não possui quartos disponíveis no momento.`
+        );
+      }
+    } catch (error) {
+      messageError(error.message);
+    }
+  }
   findAll() {
     try {
       return database.findAll("reservations");
@@ -270,7 +253,6 @@ class HotelReservationService {
       return {};
     }
   }
-
   findById(id) {
     try {
       return database.findById("reservations", id);
@@ -282,45 +264,29 @@ class HotelReservationService {
 }
 const hotelReservationService = new HotelReservationService();
 
-/*USO*/
-// TESTES PARA CITY
+// TESTES PARA CIDADES
 cityService.createCity("Rio de Janeiro");
 cityService.createCity("Porto Alegre");
-cityService.createCity("São Paulo");
-// console.log(cityService.findAll());
-// console.log(cityService.findById(1));
-// console.log(cityService.findById(4));
-
-// TESTES PARA HOTEL
-function createHotel(name, idCity, numberOfRooms) {
-  try {
-    const newHotel = hotelService.createHotel(name, idCity, numberOfRooms);
-    console.log("Hotel criado com sucesso!", newHotel);
-  } catch (error) {
-    messageError(error.message);
-  }
-}
-
+cityService.createCity("Canoas");
+cityService.createCity(); // Deve gerar erro por não informar o nome da cidade.
 console.log(cityService.findAll());
 
-createHotel("Copa Cabana Palace", 1, 200);
-createHotel("Ibis ERRADO", 4, 160);
-createHotel("Ibis", 2, 160);
-console.log(hotelService.findById(2));
+// TESTES PARA HOTEL
+hotelService.createHotel("Copa Cabana Palace", 1, 2);
+hotelService.createHotel("Ibis", 2, 5);
+hotelService.createHotel("Canoas Hotel", 3, 3);
+hotelService.createHotel("Ibis", 4, 1); // Deve gerar erro por não existir cidade de id $
 console.log(hotelService.findAll());
 
 // TESTES PARA RESERVAS
-// hotelReservationService.createReservation(1, "Pedro");
-// console.log(hotelReservationService.findAll());
-// console.log(hotelReservationService.findAll());
-// console.log(hotelService.findById(1));
-// console.log(hotelService.findById(4));
-// console.log(hotelReservationService.findById(2));
+hotelReservationService.createReservation(1, "Pedro");
+hotelReservationService.createReservation(1, "João");
+hotelReservationService.createReservation(1, "Henrique"); // Deve gerar erro por não ter quarto disponìvel neste hotel
+hotelReservationService.createReservation(3, "Maria");
+console.log(hotelService.findAll());
 
 /*
-IMPLEMENTAÇÕES
- - VERIFICAR DISPONIBILIDADE DE QUARTOS ANTES DE FAZER RESERVA
- - ATUALIZAR QUANTIDADE DE QUARTOS DISPONIVEIS AO FAZER RESERVA
+  IMPLEMENTAÇÕES
  - LISTAR QUARTOS DISPONIVEIS (COM POSSIBILIDADE DE FAZER RESERVA)
  - INCLUIR FUNÇÃO DE CHECK=IN E CHECK-OUT NAS RESERVAS
  - VER DEMAIS REQUISITOS
