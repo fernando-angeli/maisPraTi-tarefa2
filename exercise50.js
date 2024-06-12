@@ -6,15 +6,15 @@ deverá ser capaz de interagir com o usuário através do console do navegador e
 um registro das reservas e hotéis disponíveis. Utilize objetos e arrays para gerenciar as
 informações. Não é necessário interface gráfica, apenas funcionalidade lógica.
 1. Estrutura de Dados:
-○ Hotel: Cada hotel deve ser um objeto com propriedades para id, nome,
+OK > ○ Hotel: Cada hotel deve ser um objeto com propriedades para id, nome,
 cidade, quartos totais e quartos disponiveis.
-○ Reservas: Cada reserva deve ser um objeto contendo idReserva, idHotel, e
+OK > ○ Reservas: Cada reserva deve ser um objeto contendo idReserva, idHotel, e
 nomeCliente.
 2. Funcionalidades:
-○ Adicionar hotéis: Permitir que o usuário adicione novos hotéis ao sistema.
-○ Buscar hotéis por cidade: Permitir que o usuário liste todos os hotéis
+OK > ○ Adicionar hotéis: Permitir que o usuário adicione novos hotéis ao sistema.
+OK > ○ Buscar hotéis por cidade: Permitir que o usuário liste todos os hotéis
 disponíveis em uma cidade específica.
-○ Fazer reserva: Permitir que um usuário faça uma reserva em um hotel. Isso
+OK > ○ Fazer reserva: Permitir que um usuário faça uma reserva em um hotel. Isso
 deve diminuir o número de quartos disponiveis do hotel.
 ○ Cancelar reserva: Permitir que um usuário cancele uma reserva. Isso deve
 aumentar o número de quartos disponiveis no hotel correspondente.
@@ -156,7 +156,7 @@ class Hotel {
   constructor(id, name, cityId, numberOfRooms) {
     this.id = id;
     this.name = name;
-    this.city = cityId;
+    this.cityId = cityId;
     this.numberOfRooms = numberOfRooms;
     this.availableRooms = this.numberOfRooms;
     this.reservedRooms = 0;
@@ -168,12 +168,12 @@ class HotelService {
     this.cityService = cityService;
     this.database = database;
   }
-  createHotel(name, idCity, numberOfRooms) {
+  createHotel(name, cityId, numberOfRooms) {
     try {
-      const city = cityService.findById(idCity);
+      const city = cityService.findById(cityId);
       if (!isEmpty(city)) {
         const id = database.generateIdHotel();
-        const newHotel = new Hotel(id, name, idCity, numberOfRooms);
+        const newHotel = new Hotel(id, name, cityId, numberOfRooms);
         database.insertOrUpdate(newHotel);
         console.log("Hotel criado com sucesso:", newHotel);
       }
@@ -200,6 +200,12 @@ class HotelService {
     } catch (error) {
       messageError(error.message);
     }
+  }
+  findAvailableHotelsByCity(cityId) {
+    const hotels = Object.values(database.findAll("hotels"));
+    return hotels.filter(
+      (hotel) => hotel.cityId === cityId && hotel.availableRooms > 0
+    );
   }
   getAvailableRooms(id) {
     const hotel = this.findById(id);
@@ -273,6 +279,7 @@ console.log(cityService.findAll());
 
 // TESTES PARA HOTEL
 hotelService.createHotel("Copa Cabana Palace", 1, 2);
+hotelService.createHotel("Ibis", 1, 5);
 hotelService.createHotel("Ibis", 2, 5);
 hotelService.createHotel("Canoas Hotel", 3, 3);
 hotelService.createHotel("Ibis", 4, 1); // Deve gerar erro por não existir cidade de id $
@@ -283,8 +290,10 @@ hotelReservationService.createReservation(1, "Pedro");
 hotelReservationService.createReservation(1, "João");
 hotelReservationService.createReservation(1, "Henrique"); // Deve gerar erro por não ter quarto disponìvel neste hotel
 hotelReservationService.createReservation(3, "Maria");
-console.log(hotelService.findAll());
+console.log(hotelReservationService.findAll());
 
+console.log("TESTE FILTRO CIDADE / HOTEL");
+console.log(hotelService.findAvailableHotelsByCity(1));
 /*
   IMPLEMENTAÇÕES
  - LISTAR QUARTOS DISPONIVEIS (COM POSSIBILIDADE DE FAZER RESERVA)
