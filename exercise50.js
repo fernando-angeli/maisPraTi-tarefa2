@@ -95,6 +95,21 @@ class Database {
         return "Não identifcado";
     }
   }
+  delete(object) {
+    switch (true) {
+      case object instanceof Hotel:
+        this.database.hotels[object.id] = {};
+        break;
+      case object instanceof City:
+        this.database.cities[object.id] = {};
+        break;
+      case object instanceof HotelReservation:
+        this.database.reservations[object.id] = {};
+        break;
+      default:
+        throw new Error("Entidade não encontrada.");
+    }
+  }
 }
 const database = new Database();
 
@@ -181,9 +196,15 @@ class HotelService {
       messageError(error.message);
     }
   }
-  updateHotel(hotel) {
+  reservateRoom(hotel) {
     hotel.availableRooms--;
     hotel.reservedRooms++;
+    database.insertOrUpdate(hotel);
+    return hotel;
+  }
+  cancelReservateRoom(hotel) {
+    hotel.availableRooms++;
+    hotel.reservateRoom--;
     database.insertOrUpdate(hotel);
     return hotel;
   }
@@ -237,7 +258,7 @@ class HotelReservationService {
       const hotel = hotelService.findById(idHotel);
       if (!isEmpty(hotel) && hotel.availableRooms > 0) {
         const id = database.generateIdHotelReservation();
-        hotelService.updateHotel(hotel);
+        hotelService.reservateRoom(hotel);
         let newReservation = new HotelReservation(id, idHotel, nameClient);
         database.insertOrUpdate(newReservation);
         console.log("Reserva criada com sucesso:", newReservation);
@@ -246,6 +267,20 @@ class HotelReservationService {
         throw new Error(
           `Lamentamos mas o hotel selecionado não possui quartos disponíveis no momento.`
         );
+      }
+    } catch (error) {
+      messageError(error.message);
+    }
+  }
+  cancelReservation(reservationId) {
+    try {
+      const reservation = hotelReservationService.findById(reservationId);
+      if (!isEmpty(reservation)) {
+        const hotel = hotelService.findById(reservation.idHotel);
+        hotelService.cancelReservateRoom(hotel);
+        database.delete(reservation);
+        console.log("Reserva cancelada com sucesso.");
+        return;
       }
     } catch (error) {
       messageError(error.message);
@@ -275,25 +310,30 @@ cityService.createCity("Rio de Janeiro");
 cityService.createCity("Porto Alegre");
 cityService.createCity("Canoas");
 cityService.createCity(); // Deve gerar erro por não informar o nome da cidade.
-console.log(cityService.findAll());
+//console.log(cityService.findAll());
 
 // TESTES PARA HOTEL
 hotelService.createHotel("Copa Cabana Palace", 1, 2);
 hotelService.createHotel("Ibis", 1, 5);
 hotelService.createHotel("Ibis", 2, 5);
 hotelService.createHotel("Canoas Hotel", 3, 3);
-hotelService.createHotel("Ibis", 4, 1); // Deve gerar erro por não existir cidade de id $
-console.log(hotelService.findAll());
+//hotelService.createHotel("Ibis", 4, 1); // Deve gerar erro por não existir cidade de id $
+//console.log(hotelService.findAll());
+
+// TESTES PARA FILTRO HOTÉIS DISPONIVEIS POR CIDADE
+console.log("TESTE FILTRO CIDADE / HOTEL");
+console.log(hotelService.findAvailableHotelsByCity(1));
 
 // TESTES PARA RESERVAS
 hotelReservationService.createReservation(1, "Pedro");
 hotelReservationService.createReservation(1, "João");
 hotelReservationService.createReservation(1, "Henrique"); // Deve gerar erro por não ter quarto disponìvel neste hotel
+hotelReservationService.createReservation(3, "Henrique");
+console.log(hotelReservationService.findAll());
+hotelReservationService.cancelReservation(2);
 hotelReservationService.createReservation(3, "Maria");
 console.log(hotelReservationService.findAll());
 
-console.log("TESTE FILTRO CIDADE / HOTEL");
-console.log(hotelService.findAvailableHotelsByCity(1));
 /*
   IMPLEMENTAÇÕES
  - LISTAR QUARTOS DISPONIVEIS (COM POSSIBILIDADE DE FAZER RESERVA)
