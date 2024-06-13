@@ -16,13 +16,13 @@ OK > ○ Buscar hotéis por cidade: Permitir que o usuário liste todos os hoté
 disponíveis em uma cidade específica.
 OK > ○ Fazer reserva: Permitir que um usuário faça uma reserva em um hotel. Isso
 deve diminuir o número de quartos disponiveis do hotel.
-○ Cancelar reserva: Permitir que um usuário cancele uma reserva. Isso deve
+OK > ○ Cancelar reserva: Permitir que um usuário cancele uma reserva. Isso deve
 aumentar o número de quartos disponiveis no hotel correspondente.
-○ Listar reservas: Mostrar todas as reservas, incluindo detalhes do hotel e do
+OK > ○ Listar reservas: Mostrar todas as reservas, incluindo detalhes do hotel e do
 cliente.
 3. Regras de Negócio:
-○ Um hotel só pode aceitar reservas se houver quartos disponíveis.
-○ As reservas devem ser identificadas por um ID único e associadas a um
+OK > ○ Um hotel só pode aceitar reservas se houver quartos disponíveis.
+OK > ○ As reservas devem ser identificadas por um ID único e associadas a um
 único hotel.
 4. Desafios Adicionais (Opcionais):
 ○ Implementar uma função de check-in e check-out que atualize a
@@ -125,7 +125,7 @@ function isEmpty(obj) {
 class City {
   constructor(id, name) {
     this.id = id;
-    this.city = name;
+    this.name = name;
   }
 }
 
@@ -204,7 +204,7 @@ class HotelService {
   }
   cancelReservateRoom(hotel) {
     hotel.availableRooms++;
-    hotel.reservateRoom--;
+    hotel.reservedRooms--;
     database.insertOrUpdate(hotel);
     return hotel;
   }
@@ -241,17 +241,18 @@ const hotelService = new HotelService();
 
 /* Entity HotelResevation (Reservas de hoteis) */
 class HotelReservation {
-  constructor(id, idHotel, nameClient) {
+  constructor(id, idHotel, clientName) {
     this.id = id;
     this.idHotel = idHotel;
-    this.nameClient = nameClient;
+    this.clientName = clientName;
   }
 }
 
 class HotelReservationService {
-  constructor(database, hotelService) {
+  constructor(database, hotelService, cityService) {
     this.database = database;
     this.hotelService = hotelService;
+    this.cityService = cityService;
   }
   createReservation(idHotel, nameClient) {
     try {
@@ -302,8 +303,37 @@ class HotelReservationService {
       return {};
     }
   }
+  findAllDetailedReservation() {
+    const reservationsDTO = [];
+    try {
+      const reservations = Object.values(database.findAll("reservations"));
+      reservations.forEach((reservation) => {
+        if (!isEmpty(reservation)) {
+          const hotel = hotelService.findById(reservation.idHotel);
+          const city = cityService.findById(hotel.cityId);
+
+          reservationsDTO.push(
+            new HotelReservationDTO(reservation, hotel, city)
+          );
+        }
+      });
+      return reservationsDTO;
+    } catch (error) {
+      messageError(error.messages);
+    }
+  }
 }
 const hotelReservationService = new HotelReservationService();
+
+/* DTO para retornar Reservas com id, nome cliente, nome hotel e cidade hotel */
+class HotelReservationDTO {
+  constructor(hotelReservation, hotel, city) {
+    this.reservationId = hotelReservation.id;
+    this.clientName = hotelReservation.clientName;
+    this.hotelName = hotel.name;
+    this.cityName = city.name;
+  }
+}
 
 // TESTES PARA CIDADES
 cityService.createCity("Rio de Janeiro");
@@ -329,14 +359,12 @@ hotelReservationService.createReservation(1, "Pedro");
 hotelReservationService.createReservation(1, "João");
 hotelReservationService.createReservation(1, "Henrique"); // Deve gerar erro por não ter quarto disponìvel neste hotel
 hotelReservationService.createReservation(3, "Henrique");
-console.log(hotelReservationService.findAll());
 hotelReservationService.cancelReservation(2);
 hotelReservationService.createReservation(3, "Maria");
-console.log(hotelReservationService.findAll());
+console.log(hotelReservationService.findAllDetailedReservation());
 
 /*
   IMPLEMENTAÇÕES
- - LISTAR QUARTOS DISPONIVEIS (COM POSSIBILIDADE DE FAZER RESERVA)
  - INCLUIR FUNÇÃO DE CHECK=IN E CHECK-OUT NAS RESERVAS
  - VER DEMAIS REQUISITOS
  */
