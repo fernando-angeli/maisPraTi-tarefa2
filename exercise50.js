@@ -338,8 +338,7 @@ class HotelReservationDTO {
 /* Criação de menu para iteração com usuário */
 function menuPrincipal() {
   const menu = () => {
-    clear();
-    console.log(" ---- RESERVAS DE HOTÉIS ---- ");
+    title();
     console.log(
       " - INICIO - \n".yellow,
       `[0] ENCERRAR\n`.red,
@@ -372,35 +371,114 @@ function menuPrincipal() {
 }
 
 function citySubmenu() {
-  //clear();
-  console.log(
-    " - CIDADES - \n".green,
-    `[0] Voltar ao menu inicial\n`.red,
-    `[1] Cadastrar\n [2] Ver todas\n [3] Pesquisar`.blue
-  );
+  const submenu = () => {
+    title();
+    console.log(
+      " - INICIO / CIDADES - \n".green,
+      `[0] Voltar ao menu inicial\n`.red,
+      `[1] Cadastrar\n [2] Ver todas\n [3] Pesquisar`.blue
+    );
+  };
+  submenu();
+  let option = parseInt(prompt("Digite uma opção> "));
+  while (option < 0 || option > 3) {
+    delay(2000, "ERRO - Opção inválida!", menu());
+    option = parseInt(prompt("Digite uma opção> "));
+  }
+  switch (option) {
+    case 0:
+      menuPrincipal();
+    case 1:
+      //cadastrar cidade;
+      break;
+    case 2:
+      //ver todas as cidades
+      break;
+    case 3:
+      //pesquisar cidades
+      break;
+    default:
+      menu();
+      break;
+  }
 }
 
 function hotelSubmenu() {
-  //clear();
-  console.log(
-    ` - HOTÉIS - \n`.green,
-    `[0] Voltar ao menu inicial\n`.red,
-    `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Consultar por cidade`
-      .blue
-  );
+  const submenu = () => {
+    title();
+    console.log(
+      ` - INICIO / HOTÉIS - \n`.green,
+      `[0] Voltar ao menu inicial\n`.red,
+      `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Consultar por cidade`
+        .blue
+    );
+  };
+  submenu();
+  let option = parseInt(prompt("Digite uma opção> "));
+  while (option < 0 || option > 3) {
+    delay(2000, "ERRO - Opção inválida!", menu());
+    option = parseInt(prompt("Digite uma opção> "));
+  }
+  switch (option) {
+    case 0:
+      menuPrincipal();
+    case 1:
+      //cadastrar hotel;
+      break;
+    case 2:
+      //ver todas os hoteis
+      break;
+    case 3:
+      //pesquisar hotéis
+      break;
+    case 4:
+      //pesquisar hotéis disponíveis por cidade
+      break;
+    default:
+      menu();
+      break;
+  }
 }
 
 function hotelReservationSubmenu() {
-  //clear();
-  console.log(
-    ` - RESERVAS - \n`.green,
-    `[0] Voltar ao menu inicial\n`.red,
-    `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Encerrar`.blue
-  );
+  const submenu = () => {
+    title();
+    console.log(
+      ` - INICIO / RESERVAS - \n`.green,
+      `[0] Voltar ao menu inicial\n`.red,
+      `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Cancelar`.blue
+    );
+  };
+  submenu();
+  let option = parseInt(prompt("Digite uma opção> "));
+  while (option < 0 || option > 3) {
+    delay(2000, "ERRO - Opção inválida!", menu());
+    option = parseInt(prompt("Digite uma opção> "));
+  }
+  switch (option) {
+    case 0:
+      menuPrincipal();
+    case 1:
+      //cadastrar reserva;
+      break;
+    case 2:
+      //ver todas as reservas
+      break;
+    case 3:
+      //pesquisar reservas
+      break;
+    case 4:
+      //cancelar reserva
+      break;
+    default:
+      menu();
+      break;
+  }
 }
 
-function clear() {
+function title() {
   console.clear();
+  console.log(" ---- RESERVAS DE HOTÉIS ---- ");
 }
 
 function delay(seconds, message, callback) {
