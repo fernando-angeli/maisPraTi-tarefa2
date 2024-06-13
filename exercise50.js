@@ -335,20 +335,91 @@ class HotelReservationDTO {
   }
 }
 
+/* Criação de menu para iteração com usuário */
+function menuPrincipal() {
+  const menu = () => {
+    clear();
+    console.log(" ---- RESERVAS DE HOTÉIS ---- ");
+    console.log(
+      " - INICIO - \n".yellow,
+      `[0] ENCERRAR\n`.red,
+      `[1] Cidades\n [2] Hotéis\n [3] Reservas`.blue
+    );
+  };
+  menu();
+  let option = parseInt(prompt("Digite uma opção> "));
+  while (option < 0 || option > 3) {
+    delay(2000, "ERRO - Opção inválida!", menu());
+    option = parseInt(prompt("Digite uma opção> "));
+  }
+  switch (option) {
+    case 0:
+      delay(2000, "Encerrando sistema...", "");
+      return;
+    case 1:
+      citySubmenu();
+      break;
+    case 2:
+      hotelSubmenu();
+      break;
+    case 3:
+      hotelReservationSubmenu();
+      break;
+    default:
+      menu();
+      break;
+  }
+}
+
+function citySubmenu() {
+  //clear();
+  console.log(
+    " - CIDADES - \n".green,
+    `[0] Voltar ao menu inicial\n`.red,
+    `[1] Cadastrar\n [2] Ver todas\n [3] Pesquisar`.blue
+  );
+}
+
+function hotelSubmenu() {
+  //clear();
+  console.log(
+    ` - HOTÉIS - \n`.green,
+    `[0] Voltar ao menu inicial\n`.red,
+    `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Consultar por cidade`
+      .blue
+  );
+}
+
+function hotelReservationSubmenu() {
+  //clear();
+  console.log(
+    ` - RESERVAS - \n`.green,
+    `[0] Voltar ao menu inicial\n`.red,
+    `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Encerrar`.blue
+  );
+}
+
+function clear() {
+  console.clear();
+}
+
+function delay(seconds, message, callback) {
+  console.log(message);
+  setTimeout(() => {
+    callback;
+  }, seconds);
+}
+
 // TESTES PARA CIDADES
 cityService.createCity("Rio de Janeiro");
 cityService.createCity("Porto Alegre");
 cityService.createCity("Canoas");
-cityService.createCity(); // Deve gerar erro por não informar o nome da cidade.
-//console.log(cityService.findAll());
 
 // TESTES PARA HOTEL
 hotelService.createHotel("Copa Cabana Palace", 1, 2);
 hotelService.createHotel("Ibis", 1, 5);
 hotelService.createHotel("Ibis", 2, 5);
 hotelService.createHotel("Canoas Hotel", 3, 3);
-//hotelService.createHotel("Ibis", 4, 1); // Deve gerar erro por não existir cidade de id $
-//console.log(hotelService.findAll());
 
 // TESTES PARA FILTRO HOTÉIS DISPONIVEIS POR CIDADE
 console.log("TESTE FILTRO CIDADE / HOTEL");
@@ -357,14 +428,13 @@ console.log(hotelService.findAvailableHotelsByCity(1));
 // TESTES PARA RESERVAS
 hotelReservationService.createReservation(1, "Pedro");
 hotelReservationService.createReservation(1, "João");
-hotelReservationService.createReservation(1, "Henrique"); // Deve gerar erro por não ter quarto disponìvel neste hotel
 hotelReservationService.createReservation(3, "Henrique");
-hotelReservationService.cancelReservation(2);
 hotelReservationService.createReservation(3, "Maria");
-console.log(hotelReservationService.findAllDetailedReservation());
 
 /*
   IMPLEMENTAÇÕES
  - INCLUIR FUNÇÃO DE CHECK=IN E CHECK-OUT NAS RESERVAS
  - VER DEMAIS REQUISITOS
  */
+
+menuPrincipal();
