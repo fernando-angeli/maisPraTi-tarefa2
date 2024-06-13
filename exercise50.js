@@ -130,11 +130,10 @@ class City {
 }
 
 class CityService {
-  constructor(database) {
-    this.database = database;
-  }
-  createCity(name) {
+  constructor() {}
+  create() {
     try {
+      const name = prompt("Nome da cidade: ");
       if (!isEmpty(name)) {
         const id = database.generateIdCity();
         const newCity = new City(id, name);
@@ -149,13 +148,16 @@ class CityService {
   }
   findAll() {
     try {
-      return database.findAll("cities");
+      return console.log(database.findAll("cities"));
     } catch (error) {
       messageError(error.message);
       return {};
     }
   }
   findById(id) {
+    if (id === undefined) {
+      id = parseInt(prompt("Informe o ID para buscar: "));
+    }
     try {
       return database.findById("cities", id);
     } catch (error) {
@@ -164,7 +166,6 @@ class CityService {
     }
   }
 }
-const cityService = new CityService();
 
 /* Entity Hotel (Hoteis) */
 class Hotel {
@@ -179,13 +180,18 @@ class Hotel {
 }
 
 class HotelService {
-  constructor(cityService, database) {
-    this.cityService = cityService;
-    this.database = database;
+  constructor() {
+    this.cityService = new CityService();
   }
-  createHotel(name, cityId, numberOfRooms) {
+  create() {
     try {
-      const city = cityService.findById(cityId);
+      let name = prompt("Nome do hotel: ");
+      let { cityId, city } = "";
+      do {
+        cityId = parseInt(prompt("ID da cidade: "));
+        city = this.cityService.findById(cityId);
+      } while (isEmpty(city));
+      const numberOfRooms = parseInt(prompt("Número de quartos: "));
       if (!isEmpty(city)) {
         const id = database.generateIdHotel();
         const newHotel = new Hotel(id, name, cityId, numberOfRooms);
@@ -210,19 +216,25 @@ class HotelService {
   }
   findAll() {
     try {
-      return database.findAll("hotels");
+      return console.log(database.findAll("hotels"));
     } catch (error) {
       messageError(error.message);
     }
   }
   findById(id) {
+    if (id === undefined) {
+      id = parseInt(prompt("Informe o ID para buscar: "));
+    }
     try {
       return database.findById("hotels", id);
     } catch (error) {
       messageError(error.message);
     }
   }
-  findAvailableHotelsByCity(cityId) {
+  findAvailableHotelsByCity() {
+    const cityId = parseInt(
+      prompt("Informe o ID da cidade para consultar os hotéis disponíveis: ")
+    );
     const hotels = Object.values(database.findAll("hotels"));
     return hotels.filter(
       (hotel) => hotel.cityId === cityId && hotel.availableRooms > 0
@@ -237,7 +249,6 @@ class HotelService {
     }
   }
 }
-const hotelService = new HotelService();
 
 /* Entity HotelResevation (Reservas de hoteis) */
 class HotelReservation {
@@ -249,17 +260,18 @@ class HotelReservation {
 }
 
 class HotelReservationService {
-  constructor(database, hotelService, cityService) {
-    this.database = database;
-    this.hotelService = hotelService;
-    this.cityService = cityService;
+  constructor() {
+    this.cityService = new CityService();
+    this.hotelService = new HotelService();
   }
-  createReservation(idHotel, nameClient) {
+  create() {
     try {
-      const hotel = hotelService.findById(idHotel);
+      let idHotel = parseInt(prompt("ID do hotel: "));
+      let hotel = this.hotelService.findById(idHotel);
+      let nameClient = prompt("Nome do cliente: ");
       if (!isEmpty(hotel) && hotel.availableRooms > 0) {
         const id = database.generateIdHotelReservation();
-        hotelService.reservateRoom(hotel);
+        this.hotelService.reservateRoom(hotel);
         let newReservation = new HotelReservation(id, idHotel, nameClient);
         database.insertOrUpdate(newReservation);
         console.log("Reserva criada com sucesso:", newReservation);
@@ -273,12 +285,15 @@ class HotelReservationService {
       messageError(error.message);
     }
   }
-  cancelReservation(reservationId) {
+  cancelReservation() {
+    let reservationId = parseInt(
+      prompt("Informe o ID que deseja cancelar a reserva: ")
+    );
     try {
-      const reservation = hotelReservationService.findById(reservationId);
+      const reservation = this.findById(reservationId);
       if (!isEmpty(reservation)) {
-        const hotel = hotelService.findById(reservation.idHotel);
-        hotelService.cancelReservateRoom(hotel);
+        let hotel = this.hotelService.findById(reservation.idHotel);
+        this.hotelService.cancelReservateRoom(hotel);
         database.delete(reservation);
         console.log("Reserva cancelada com sucesso.");
         return;
@@ -296,6 +311,9 @@ class HotelReservationService {
     }
   }
   findById(id) {
+    if (id === undefined) {
+      id = parseInt(prompt("Informe o ID para buscar: "));
+    }
     try {
       return database.findById("reservations", id);
     } catch (error) {
@@ -304,16 +322,20 @@ class HotelReservationService {
     }
   }
   findAllDetailedReservation() {
-    const reservationsDTO = [];
     try {
-      const reservations = Object.values(database.findAll("reservations"));
+      let reservationsDTO = [];
+      let reservations = Object.values(this.findAll());
       reservations.forEach((reservation) => {
         if (!isEmpty(reservation)) {
-          const hotel = hotelService.findById(reservation.idHotel);
-          const city = cityService.findById(hotel.cityId);
-
+          let hotel = this.hotelService.findById(reservation.idHotel);
+          let city = this.cityService.findById(hotel.cityId);
           reservationsDTO.push(
-            new HotelReservationDTO(reservation, hotel, city)
+            new HotelReservationDTO(
+              reservation.id,
+              reservation.clientName,
+              hotel.name,
+              city.name
+            )
           );
         }
       });
@@ -323,162 +345,158 @@ class HotelReservationService {
     }
   }
 }
-const hotelReservationService = new HotelReservationService();
 
 /* DTO para retornar Reservas com id, nome cliente, nome hotel e cidade hotel */
 class HotelReservationDTO {
-  constructor(hotelReservation, hotel, city) {
-    this.reservationId = hotelReservation.id;
-    this.clientName = hotelReservation.clientName;
-    this.hotelName = hotel.name;
-    this.cityName = city.name;
+  constructor(reservationId, clienteName, hotelName, cityName) {
+    this.reservationId = reservationId;
+    this.clientName = clienteName;
+    this.hotelName = hotelName;
+    this.cityName = cityName;
   }
 }
+const hotelReservationDTO = new HotelReservationDTO();
 
 /* Criação de menu para iteração com usuário */
-function menuPrincipal() {
-  const menu = () => {
-    title();
-    console.log(
-      " - INICIO - \n".yellow,
-      `[0] ENCERRAR\n`.red,
-      `[1] Cidades\n [2] Hotéis\n [3] Reservas`.blue
-    );
-  };
-  menu();
-  let option = parseInt(prompt("Digite uma opção> "));
-  while (option < 0 || option > 3) {
-    delay(2000, "ERRO - Opção inválida!", menu());
-    option = parseInt(prompt("Digite uma opção> "));
+class MenuSystem {
+  constructor() {
+    this.cityService = new CityService();
+    this.hotelService = new HotelService();
+    this.hotelReservationService = new HotelReservationService();
   }
-  switch (option) {
-    case 0:
-      delay(2000, "Encerrando sistema...", "");
-      return;
-    case 1:
-      citySubmenu();
-      break;
-    case 2:
-      hotelSubmenu();
-      break;
-    case 3:
-      hotelReservationSubmenu();
-      break;
-    default:
-      menu();
-      break;
+  mainMenu() {
+    while (true) {
+      console.clear();
+      console.log(
+        `${this.title()}`,
+        `| INICIO\n`.blue,
+        `[1] Cidades\n [2] Hotéis\n [3] Reservas\n`.green,
+        `[S] SAIR\n`.red
+      );
+      const option = prompt("Digite uma opção > ").toUpperCase();
+      switch (option) {
+        case "S":
+          delay(1000, "Encerrando sistema...", "");
+          return;
+        case "1":
+          this.citySubmenu();
+          break;
+        case "2":
+          this.hotelSubmenu();
+          break;
+        case "3":
+          this.hotelReservationSubmenu();
+          break;
+        default:
+          console.log("Opção inválida.");
+      }
+    }
   }
-}
-
-function citySubmenu() {
-  const submenu = () => {
-    title();
-    console.log(
-      " - INICIO / CIDADES - \n".green,
-      `[0] Voltar ao menu inicial\n`.red,
-      `[1] Cadastrar\n [2] Ver todas\n [3] Pesquisar`.blue
-    );
-  };
-  submenu();
-  let option = parseInt(prompt("Digite uma opção> "));
-  while (option < 0 || option > 3) {
-    delay(2000, "ERRO - Opção inválida!", menu());
-    option = parseInt(prompt("Digite uma opção> "));
+  citySubmenu() {
+    while (true) {
+      console.clear();
+      console.log(
+        `${this.title()}`,
+        `| INICIO/CIDADES\n`.blue,
+        `[1] Cadastrar\n [2] Todas\n [3] Pesquisa\n`.green,
+        `[V] VOLTAR\n`.red
+      );
+      const option = prompt("Digite uma opção> ").toUpperCase();
+      switch (option) {
+        case "V":
+          return;
+        case "1":
+          this.cityService.create();
+          if (this.continue()) break;
+        case "2":
+          this.cityService.findAll();
+          if (this.continue()) break;
+        case "3":
+          console.log(this.cityService.findById());
+          if (this.continue()) break;
+        default:
+          console.log("Opção inválida.");
+      }
+    }
   }
-  switch (option) {
-    case 0:
-      menuPrincipal();
-    case 1:
-      //cadastrar cidade;
-      break;
-    case 2:
-      //ver todas as cidades
-      break;
-    case 3:
-      //pesquisar cidades
-      break;
-    default:
-      menu();
-      break;
+  hotelSubmenu() {
+    while (true) {
+      console.clear();
+      this.title();
+      console.log(
+        ` - INICIO/HOTÉIS - \n`.yellow,
+        `[0] Voltar ao menu inicial\n`.green,
+        `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Consultar por cidade`
+          .blue
+      );
+      const option = parseInt(prompt("Digite uma opção> "));
+      switch (option) {
+        case 0:
+          return;
+        case 1:
+          this.hotelService.create();
+          if (this.continue()) break;
+        case 2:
+          this.hotelService.findAll();
+          if (this.continue()) break;
+        case 3:
+          console.log(this.hotelService.findById());
+          if (this.continue()) break;
+        case 4:
+          console.log(this.hotelService.findAvailableHotelsByCity());
+          if (this.continue()) break;
+        default:
+          console.log("Opção inválida.");
+      }
+    }
   }
-}
-
-function hotelSubmenu() {
-  const submenu = () => {
-    title();
-    console.log(
-      ` - INICIO / HOTÉIS - \n`.green,
-      `[0] Voltar ao menu inicial\n`.red,
-      `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Consultar por cidade`
-        .blue
-    );
-  };
-  submenu();
-  let option = parseInt(prompt("Digite uma opção> "));
-  while (option < 0 || option > 3) {
-    delay(2000, "ERRO - Opção inválida!", menu());
-    option = parseInt(prompt("Digite uma opção> "));
+  hotelReservationSubmenu() {
+    while (true) {
+      console.clear();
+      this.title();
+      console.log(
+        ` - INICIO / RESERVAS - \n`.green,
+        `[0] Voltar ao menu inicial\n`.red,
+        `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Cancelar`.blue
+      );
+      const option = parseInt(prompt("Digite uma opção> "));
+      switch (option) {
+        case 0:
+          return;
+        case 1:
+          this.hotelReservationService.create();
+          if (this.continue()) break;
+        case 2:
+          console.log(
+            this.hotelReservationService.findAllDetailedReservation()
+          );
+          if (this.continue()) break;
+        case 3:
+          console.log(this.hotelReservationService.findById());
+          if (this.continue()) break;
+        case 4:
+          this.hotelReservationService.cancelReservation();
+          if (this.continue()) break;
+        default:
+          console.log("Opção inválida.");
+          break;
+      }
+    }
   }
-  switch (option) {
-    case 0:
-      menuPrincipal();
-    case 1:
-      //cadastrar hotel;
-      break;
-    case 2:
-      //ver todas os hoteis
-      break;
-    case 3:
-      //pesquisar hotéis
-      break;
-    case 4:
-      //pesquisar hotéis disponíveis por cidade
-      break;
-    default:
-      menu();
-      break;
+  title() {
+    return " >>> RESERVAS DE HOTÉIS <<< ".yellow;
   }
-}
-
-function hotelReservationSubmenu() {
-  const submenu = () => {
-    title();
-    console.log(
-      ` - INICIO / RESERVAS - \n`.green,
-      `[0] Voltar ao menu inicial\n`.red,
-      `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Cancelar`.blue
-    );
-  };
-  submenu();
-  let option = parseInt(prompt("Digite uma opção> "));
-  while (option < 0 || option > 3) {
-    delay(2000, "ERRO - Opção inválida!", menu());
-    option = parseInt(prompt("Digite uma opção> "));
+  continue() {
+    while (true) {
+      const option = parseInt(prompt("[1] Voltar: "));
+      switch (option) {
+        case 1:
+          return true;
+        default:
+          console.log("Opção inválida.");
+      }
+    }
   }
-  switch (option) {
-    case 0:
-      menuPrincipal();
-    case 1:
-      //cadastrar reserva;
-      break;
-    case 2:
-      //ver todas as reservas
-      break;
-    case 3:
-      //pesquisar reservas
-      break;
-    case 4:
-      //cancelar reserva
-      break;
-    default:
-      menu();
-      break;
-  }
-}
-
-function title() {
-  console.clear();
-  console.log(" ---- RESERVAS DE HOTÉIS ---- ");
 }
 
 function delay(seconds, message, callback) {
@@ -489,25 +507,29 @@ function delay(seconds, message, callback) {
 }
 
 // TESTES PARA CIDADES
-cityService.createCity("Rio de Janeiro");
-cityService.createCity("Porto Alegre");
-cityService.createCity("Canoas");
+// const cityService = new CityService();
+// cityService.create("Rio de Janeiro");
+// cityService.create("Porto Alegre");
+// cityService.create("Canoas");
 
 // TESTES PARA HOTEL
-hotelService.createHotel("Copa Cabana Palace", 1, 2);
-hotelService.createHotel("Ibis", 1, 5);
-hotelService.createHotel("Ibis", 2, 5);
-hotelService.createHotel("Canoas Hotel", 3, 3);
+// const hotelService = new HotelService();
+// hotelService.create("Copa Cabana Palace", 1, 2);
+// hotelService.create("Ibis", 1, 5);
+// hotelService.create("Ibis", 2, 5);
+// hotelService.create("Canoas Hotel", 3, 3);
 
 // TESTES PARA FILTRO HOTÉIS DISPONIVEIS POR CIDADE
-console.log("TESTE FILTRO CIDADE / HOTEL");
-console.log(hotelService.findAvailableHotelsByCity(1));
+// console.log("TESTE FILTRO CIDADE / HOTEL");
+// console.log(hotelService.findAvailableHotelsByCity(1));
 
 // TESTES PARA RESERVAS
-hotelReservationService.createReservation(1, "Pedro");
-hotelReservationService.createReservation(1, "João");
-hotelReservationService.createReservation(3, "Henrique");
-hotelReservationService.createReservation(3, "Maria");
+// const hotelReservationService = new HotelReservationService();
+// hotelReservationService.create(1, "Pedro");
+// hotelReservationService.create(1, "João");
+// hotelReservationService.create(3, "Henrique");
+// hotelReservationService.create(3, "Maria");
+// console.log(hotelReservationService.findAllDetailedReservation());
 
 /*
   IMPLEMENTAÇÕES
@@ -515,4 +537,5 @@ hotelReservationService.createReservation(3, "Maria");
  - VER DEMAIS REQUISITOS
  */
 
-menuPrincipal();
+const menuSystem = new MenuSystem();
+menuSystem.mainMenu();
