@@ -447,7 +447,7 @@ class MenuSystem {
       console.log(
         `${this.title()}`,
         `| Inicio/Hotel\n`.blue,
-        `[1] Cadastrar\n [2] Todos\n [3] Pesquisa\n [4] Disponível por cidade\n`
+        `[1] Cadastrar\n [2] Todos\n [3] Pesquisa\n [4] Disponíveis por cidade\n`
           .green,
         `[V] VOLTAR\n`.red
       );
@@ -479,7 +479,7 @@ class MenuSystem {
       console.log(
         `${this.title()}`,
         `| Inicio/Reservas\n`.blue,
-        `[1] Cadastrar\n [2] Todos\n [3] Pesquisa\n [4] Cancelar reserva\n`
+        `[1] Cadastrar\n [2] Todas\n [3] Pesquisa\n [4] Cancelar reserva\n`
           .green,
         `[V] VOLTAR\n`.red
       );
