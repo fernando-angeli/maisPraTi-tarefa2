@@ -138,7 +138,7 @@ class CityService {
         const id = database.generateIdCity();
         const newCity = new City(id, name);
         database.insertOrUpdate(newCity);
-        console.log("Cidade criada com sucesso:", newCity);
+        console.log(`Cidade ${name} criada com sucesso!`);
         return;
       }
       throw new Error("Obrigatório informar o nome da cidade.");
@@ -196,7 +196,7 @@ class HotelService {
         const id = database.generateIdHotel();
         const newHotel = new Hotel(id, name, cityId, numberOfRooms);
         database.insertOrUpdate(newHotel);
-        console.log("Hotel criado com sucesso:", newHotel);
+        console.log(`Hotel ${name} criado com sucesso!`);
       }
     } catch (error) {
       messageError(error.message);
@@ -274,7 +274,7 @@ class HotelReservationService {
         this.hotelService.reservateRoom(hotel);
         let newReservation = new HotelReservation(id, idHotel, nameClient);
         database.insertOrUpdate(newReservation);
-        console.log("Reserva criada com sucesso:", newReservation);
+        console.log(`A reserva para ${nameClient} foi criada com sucesso!`);
         return;
       } else if (!isEmpty(hotel) && hotel.availableRooms === 0) {
         throw new Error(
@@ -295,7 +295,9 @@ class HotelReservationService {
         let hotel = this.hotelService.findById(reservation.idHotel);
         this.hotelService.cancelReservateRoom(hotel);
         database.delete(reservation);
-        console.log("Reserva cancelada com sucesso.");
+        console.log(
+          `Reserva ${reservation.id} de ${reservation.clientName} foi cancelada!`
+        );
         return;
       }
     } catch (error) {
@@ -430,7 +432,7 @@ class MenuSystem {
           .green,
         `[V] VOLTAR\n`.red
       );
-      const option = parseInt(prompt("Digite uma opção > ")).toUpperCase();
+      const option = prompt("Digite uma opção > ").toUpperCase();
       switch (option) {
         case "V":
           return;
@@ -438,13 +440,13 @@ class MenuSystem {
           this.hotelService.create();
           if (this.continue()) break;
         case "2":
-          this.hotelService.findAll();
+          this.printHotels();
           if (this.continue()) break;
         case "3":
-          console.log(this.hotelService.findById());
+          this.printHotel();
           if (this.continue()) break;
         case "4":
-          console.log(this.hotelService.findAvailableHotelsByCity());
+          this.printHotelsAvailables();
           if (this.continue()) break;
         default:
           console.log("Opção inválida.");
@@ -464,7 +466,7 @@ class MenuSystem {
         `[0] Voltar ao menu inicial\n`.red,
         `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Cancelar`.blue
       );
-      const option = parseInt(prompt("Digite uma opção> ")).toUpperCase();
+      const option = prompt("Digite uma opção> ").toUpperCase();
       switch (option) {
         case "V":
           return;
@@ -516,6 +518,40 @@ class MenuSystem {
       });
       result = result.substring(0, result.length - 3);
       return console.log("Cidades: [ ", result, "]");
+    }
+    return;
+  }
+  printHotel() {
+    const hotel = this.hotelService.findById();
+    const city = this.cityService.findById(hotel.cityId);
+    if (!isEmpty(hotel))
+      console.log(
+        `Hotel: [ ${hotel.id} - ${hotel.name} - ${city.name} - Quartos disponíveis: ${hotel.availableRooms} ]`
+      );
+    else return;
+  }
+  printHotels() {
+    let result = "";
+    let hotels = Object.values(this.hotelService.findAll());
+    if (!isEmpty(hotels)) {
+      hotels.forEach((hotel) => {
+        const city = this.cityService.findById(hotel.cityId);
+        result += `${hotel.id} - ${hotel.name} - ${city.name} - Quartos disponíveis: ${hotel.availableRooms}\n`;
+      });
+      return console.log(`Hoteis:\n${result}`);
+    }
+    return;
+  }
+  printHotelsAvailables() {
+    let result = "";
+    let hotels = Object.values(this.hotelService.findAvailableHotelsByCity());
+    let city = "";
+    if (!isEmpty(hotels)) {
+      hotels.forEach((hotel) => {
+        result += `${hotel.id} - ${hotel.name} - Quartos disponíveis: ${hotel.availableRooms}\n`;
+        city = this.cityService.findById(hotel.cityId);
+      });
+      return console.log(`Hoteis disponiveis em ${city.name}:\n${result}`);
     }
     return;
   }
