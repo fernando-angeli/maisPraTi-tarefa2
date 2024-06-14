@@ -138,7 +138,7 @@ class CityService {
         const id = database.generateIdCity();
         const newCity = new City(id, name);
         database.insertOrUpdate(newCity);
-        console.log(`Cidade ${name} criada com sucesso!`);
+        console.log(`Cidade ${name} criada com sucesso!`.green);
         return;
       }
       throw new Error("Obrigatório informar o nome da cidade.");
@@ -196,7 +196,7 @@ class HotelService {
         const id = database.generateIdHotel();
         const newHotel = new Hotel(id, name, cityId, numberOfRooms);
         database.insertOrUpdate(newHotel);
-        console.log(`Hotel ${name} criado com sucesso!`);
+        console.log(`Hotel ${name} criado com sucesso!`.green);
       }
     } catch (error) {
       messageError(error.message);
@@ -274,7 +274,9 @@ class HotelReservationService {
         this.hotelService.reservateRoom(hotel);
         let newReservation = new HotelReservation(id, idHotel, nameClient);
         database.insertOrUpdate(newReservation);
-        console.log(`A reserva para ${nameClient} foi criada com sucesso!`);
+        console.log(
+          `A reserva para ${nameClient} foi criada com sucesso!`.green
+        );
         return;
       } else if (!isEmpty(hotel) && hotel.availableRooms === 0) {
         throw new Error(
@@ -286,11 +288,9 @@ class HotelReservationService {
     }
   }
   cancelReservation() {
-    let reservationId = parseInt(
-      prompt("Informe o ID que deseja cancelar a reserva: ")
-    );
     try {
-      const reservation = this.findById(reservationId);
+      console.log("CANCELAMENTO DE RESERVA".red);
+      const reservation = this.findEntityById();
       if (!isEmpty(reservation)) {
         let hotel = this.hotelService.findById(reservation.idHotel);
         this.hotelService.cancelReservateRoom(hotel);
@@ -313,6 +313,25 @@ class HotelReservationService {
     }
   }
   findById(id) {
+    if (id === undefined) {
+      id = parseInt(prompt("Informe o ID para buscar: "));
+    }
+    try {
+      let reservation = database.findById("reservations", id);
+      const hotel = this.hotelService.findById(reservation.idHotel);
+      const city = this.cityService.findById(hotel.cityId);
+      return new HotelReservationDTO(
+        reservation.id,
+        reservation.clientName,
+        hotel.name,
+        city.name
+      );
+    } catch (error) {
+      messageError(error.message);
+      return {};
+    }
+  }
+  findEntityById(id) {
     if (id === undefined) {
       id = parseInt(prompt("Informe o ID para buscar: "));
     }
@@ -411,7 +430,7 @@ class MenuSystem {
           this.cityService.create();
           if (this.continue()) break;
         case "2":
-          this.printCities();
+          this.printAllCities();
           if (this.continue()) break;
         case "3":
           this.printCity();
@@ -440,7 +459,7 @@ class MenuSystem {
           this.hotelService.create();
           if (this.continue()) break;
         case "2":
-          this.printHotels();
+          this.printAllHotels();
           if (this.continue()) break;
         case "3":
           this.printHotel();
@@ -462,9 +481,7 @@ class MenuSystem {
         `| Inicio/Reservas\n`.blue,
         `[1] Cadastrar\n [2] Todos\n [3] Pesquisa\n [4] Cancelar reserva\n`
           .green,
-        `[V] VOLTAR\n`.red` - INICIO / RESERVAS - \n`.green,
-        `[0] Voltar ao menu inicial\n`.red,
-        `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Cancelar`.blue
+        `[V] VOLTAR\n`.red
       );
       const option = prompt("Digite uma opção> ").toUpperCase();
       switch (option) {
@@ -474,12 +491,10 @@ class MenuSystem {
           this.hotelReservationService.create();
           if (this.continue()) break;
         case "2":
-          console.log(
-            this.hotelReservationService.findAllDetailedReservation()
-          );
+          this.printAllReservations();
           if (this.continue()) break;
         case "3":
-          console.log(this.hotelReservationService.findById());
+          this.printReservation();
           if (this.continue()) break;
         case "4":
           this.hotelReservationService.cancelReservation();
@@ -509,7 +524,7 @@ class MenuSystem {
     if (!isEmpty(city)) console.log(`Cidade: [ ${city.id} - ${city.name} ]`);
     else return;
   }
-  printCities() {
+  printAllCities() {
     let result = "";
     let cities = Object.values(this.cityService.findAll());
     if (!isEmpty(cities)) {
@@ -530,7 +545,7 @@ class MenuSystem {
       );
     else return;
   }
-  printHotels() {
+  printAllHotels() {
     let result = "";
     let hotels = Object.values(this.hotelService.findAll());
     if (!isEmpty(hotels)) {
@@ -554,6 +569,27 @@ class MenuSystem {
       return console.log(`Hoteis disponiveis em ${city.name}:\n${result}`);
     }
     return;
+  }
+  printAllReservations() {
+    let result = "";
+    let reservations = Object.values(
+      this.hotelReservationService.findAllDetailedReservation()
+    );
+    if (!isEmpty(reservations)) {
+      reservations.forEach((reservation) => {
+        result += `${reservation.reservationId} - ${reservation.clientName} - ${reservation.hotelName} - ${reservation.cityName}\n`;
+      });
+      return console.log(`Reservas:\n${result}`);
+    }
+    return;
+  }
+  printReservation() {
+    const detaileReservation = this.hotelReservationService.findById();
+    if (!isEmpty(detaileReservation))
+      console.log(
+        `Detalhes de reserva:\n[ ${detaileReservation.reservationId} - ${detaileReservation.clientName} - ${detaileReservation.hotelName} - ${detaileReservation.cityName} ]`
+      );
+    else return;
   }
 }
 
