@@ -42,6 +42,6 @@ Ela irá iniciar com o Menu principal com as opções
 
 ## Contato
 
-Fernando Angeli - fernando.angeli@example.com
+Luiz Fernando Angeli - fernando.angeli@hotmail.com
 
 Este README.md fornece instruções detalhadas sobre como instalar, usar e informações sobre contato para o projeto "maisPraTi - Tarefa 2".
