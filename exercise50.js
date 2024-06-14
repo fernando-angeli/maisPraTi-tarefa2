@@ -148,7 +148,7 @@ class CityService {
   }
   findAll() {
     try {
-      return console.log(database.findAll("cities"));
+      return database.findAll("cities");
     } catch (error) {
       messageError(error.message);
       return {};
@@ -216,7 +216,7 @@ class HotelService {
   }
   findAll() {
     try {
-      return console.log(database.findAll("hotels"));
+      return database.findAll("hotels");
     } catch (error) {
       messageError(error.message);
     }
@@ -369,7 +369,7 @@ class MenuSystem {
       console.clear();
       console.log(
         `${this.title()}`,
-        `| INICIO\n`.blue,
+        `| Inicio\n`.blue,
         `[1] Cidades\n [2] Hotéis\n [3] Reservas\n`.green,
         `[S] SAIR\n`.red
       );
@@ -397,11 +397,11 @@ class MenuSystem {
       console.clear();
       console.log(
         `${this.title()}`,
-        `| INICIO/CIDADES\n`.blue,
+        `| Inicio/Cidades\n`.blue,
         `[1] Cadastrar\n [2] Todas\n [3] Pesquisa\n`.green,
         `[V] VOLTAR\n`.red
       );
-      const option = prompt("Digite uma opção> ").toUpperCase();
+      const option = prompt("Digite uma opção > ").toUpperCase();
       switch (option) {
         case "V":
           return;
@@ -409,10 +409,10 @@ class MenuSystem {
           this.cityService.create();
           if (this.continue()) break;
         case "2":
-          this.cityService.findAll();
+          this.printCities();
           if (this.continue()) break;
         case "3":
-          console.log(this.cityService.findById());
+          this.printCity();
           if (this.continue()) break;
         default:
           console.log("Opção inválida.");
@@ -424,25 +424,26 @@ class MenuSystem {
       console.clear();
       this.title();
       console.log(
-        ` - INICIO/HOTÉIS - \n`.yellow,
-        `[0] Voltar ao menu inicial\n`.green,
-        `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Consultar por cidade`
-          .blue
+        `${this.title()}`,
+        `| Inicio/Hotel\n`.blue,
+        `[1] Cadastrar\n [2] Todos\n [3] Pesquisa\n [4] Disponível por cidade\n`
+          .green,
+        `[V] VOLTAR\n`.red
       );
-      const option = parseInt(prompt("Digite uma opção> "));
+      const option = parseInt(prompt("Digite uma opção > ")).toUpperCase();
       switch (option) {
-        case 0:
+        case "V":
           return;
-        case 1:
+        case "1":
           this.hotelService.create();
           if (this.continue()) break;
-        case 2:
+        case "2":
           this.hotelService.findAll();
           if (this.continue()) break;
-        case 3:
+        case "3":
           console.log(this.hotelService.findById());
           if (this.continue()) break;
-        case 4:
+        case "4":
           console.log(this.hotelService.findAvailableHotelsByCity());
           if (this.continue()) break;
         default:
@@ -455,26 +456,30 @@ class MenuSystem {
       console.clear();
       this.title();
       console.log(
-        ` - INICIO / RESERVAS - \n`.green,
+        `${this.title()}`,
+        `| Inicio/Reservas\n`.blue,
+        `[1] Cadastrar\n [2] Todos\n [3] Pesquisa\n [4] Cancelar reserva\n`
+          .green,
+        `[V] VOLTAR\n`.red` - INICIO / RESERVAS - \n`.green,
         `[0] Voltar ao menu inicial\n`.red,
         `[1] Cadastrar\n [2] Ver todos\n [3] Pesquisar\n [4] Cancelar`.blue
       );
-      const option = parseInt(prompt("Digite uma opção> "));
+      const option = parseInt(prompt("Digite uma opção> ")).toUpperCase();
       switch (option) {
-        case 0:
+        case "V":
           return;
-        case 1:
+        case "1":
           this.hotelReservationService.create();
           if (this.continue()) break;
-        case 2:
+        case "2":
           console.log(
             this.hotelReservationService.findAllDetailedReservation()
           );
           if (this.continue()) break;
-        case 3:
+        case "3":
           console.log(this.hotelReservationService.findById());
           if (this.continue()) break;
-        case 4:
+        case "4":
           this.hotelReservationService.cancelReservation();
           if (this.continue()) break;
         default:
@@ -488,14 +493,31 @@ class MenuSystem {
   }
   continue() {
     while (true) {
-      const option = parseInt(prompt("[1] Voltar: "));
+      const option = prompt("[V] Voltar: ").toUpperCase();
       switch (option) {
-        case 1:
+        case "V":
           return true;
         default:
           console.log("Opção inválida.");
       }
     }
+  }
+  printCity() {
+    let city = this.cityService.findById();
+    if (!isEmpty(city)) console.log(`Cidade: [ ${city.id} - ${city.name} ]`);
+    else return;
+  }
+  printCities() {
+    let result = "";
+    let cities = Object.values(this.cityService.findAll());
+    if (!isEmpty(cities)) {
+      cities.forEach((city) => {
+        result += `${city.id} - ${city.name} | `;
+      });
+      result = result.substring(0, result.length - 3);
+      return console.log("Cidades: [ ", result, "]");
+    }
+    return;
   }
 }
 
